@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "./paginas/Login";
+import Home from "./paginas/Home";
+import Usuarios from "./paginas/Usuario";
+import FormularioUsuario from "./paginas/Usuario/FormularioUsuario";
+import Tarefas from "./paginas/Tarefas";
+import FormularioTarefa from "./paginas/Tarefas/FormularioTarefa";
+import Projetos from "./paginas/Projetos";
+import FormularioProjeto from "./paginas/Projetos/FormularioProjeto";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/usuarios" element={<Usuarios />} />
+        <Route path="/usuarios/novo" element={<FormularioUsuario />} />
+        <Route path="/usuarios/:id" element={<FormularioUsuario />} />
+        <Route path="/tarefas" element={<Tarefas />} />
+        <Route path="/tarefas/nova" element={<FormularioTarefa />} />
+        <Route path="/tarefas/:id" element={<FormularioTarefa />} />
+        <Route path="/projetos" element={<Projetos />} />
+        <Route path="/projetos/novo" element={<FormularioProjeto />} />
+        <Route path="/tarefas/:id" element={<FormularioProjeto />} />
+
+      </Routes>
+    </BrowserRouter>
   );
 }
 

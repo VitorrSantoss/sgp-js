@@ -7,20 +7,22 @@ function Home() {
     <div className="container-home">
       <Cabecalho />
 
-      <div className="container container-alert col-10 col-sm-8 col-md-6 col-lg-7 mt-3">
+      <main className="content">
         <div className="alert alert-warning" role="alert">
-          Esta página não existe!
+          <h1>Página não encontrada</h1>
+          <p>A página que você está tentando acessar não existe.</p>
         </div>
-      </div>
 
-      <div className="d-flex justify-content-center mt-3">
         <img
           src={robo404}
-          alt="404"
-          className="img-fluid"
-          style={{ maxWidth: "450px" }}
+          alt="Robô 404"
+          className="img-404"
         />
-      </div>
+
+        <a href="/" className="btn-home">
+          Voltar para a página inicial
+        </a>
+      </main>
 
       <Rodape />
     </div>

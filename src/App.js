@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./paginas/Login";
 import Home from "./paginas/Home";
-import Usuarios from "./paginas/Usuario";
-import FormularioUsuario from "./paginas/Usuario/FormularioUsuario";
+import Usuarios from "./paginas/Usuarios";
+import FormularioUsuario from "./paginas/Usuarios/FormularioUsuario";
 import Tarefas from "./paginas/Tarefas";
 import FormularioTarefa from "./paginas/Tarefas/FormularioTarefa";
 import Projetos from "./paginas/Projetos";

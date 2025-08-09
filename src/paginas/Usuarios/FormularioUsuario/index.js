@@ -4,7 +4,7 @@ import Rodape from "../../../componentes/Rodape";
 import {
   atualizarUsuario,
   buscarUsuarioPeloId,
-  cadastrarUsuario,
+  cadastrarUsuarios,
 } from "../../../servicos/usuarios";
 import { useNavigate, useParams } from "react-router-dom";
 import { format } from "date-fns";
@@ -50,7 +50,7 @@ function FormularioUsuario() {
     if (id) {
       await atualizarUsuario(id, usuario, navigate);
     } else {
-      await cadastrarUsuario(usuario, navigate);
+      await cadastrarUsuarios(usuario, navigate);
     }
   }
 

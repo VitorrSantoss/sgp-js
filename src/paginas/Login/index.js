@@ -10,61 +10,66 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const enviarFormulario = () => {
+  const enviarFormulario = (e) => {
+    e.preventDefault();
     console.log({ email, password, stayConnected });
     navigate("/home");
   };
 
   return (
     <div className="bg-container">
-      <div className="container container-login col-10 col-sm-8 col-md-6 col-lg-3">
-        <img src={logo} alt="Sistema de Gestão de Projetos" width="200" />
+      <form className="container-login" onSubmit={enviarFormulario} noValidate>
+        <img
+          src={logo}
+          alt="Sistema de Gestão de Projetos"
+          className="logo"
+          width="200"
+          height="auto"
+        />
 
-        <div className="row g-3 align-items-center mb-2">
-          <div className="col-12">
-            <input
-              type="email"
-              className="form-control"
-              id="exampleFormControlInput1"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-        </div>
+        <input
+          type="email"
+          name="email"
+          className="form-input"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          autoComplete="username"
+          aria-label="Email"
+        />
 
-        <div className="row g-3 align-items-center">
-          <div className="col-12">
-            <input
-              type="password"
-              id="inputPassword6"
-              className="form-control"
-              aria-describedby="passwordHelpInline"
-              placeholder="Senha"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </div>
+        <input
+          type="password"
+          name="password"
+          className="form-input"
+          placeholder="Senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoComplete="current-password"
+          aria-label="Senha"
+        />
 
-        <div className="form-check mt-3">
+        <div className="form-check">
           <input
             className="form-check-input"
             type="checkbox"
-            id="checkChecked"
+            id="checkStayConnected"
             checked={stayConnected}
-            onChange={(e) => setStayConnected(e.target.value)}
+            onChange={(e) => setStayConnected(e.target.checked)}
           />
-          <label className="form-check-label" htmlFor="checkChecked">
-            Mantenha-me conectado{" "}
+          <label className="form-check-label" htmlFor="checkStayConnected">
+            Mantenha-me conectado
           </label>
         </div>
 
-        <button type="button" className="btn btn-primary mt-3" onClick={enviarFormulario}>
+        <button type="submit" className="btn-login">
           Acessar
         </button>
-      </div>
+      </form>
     </div>
   );
 }
+
 export default Login;

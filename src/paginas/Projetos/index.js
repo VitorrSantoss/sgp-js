@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Cabecalho from "../../componentes/Cabecalho";
 import Rodape from "../../componentes/Rodape";
 import { useNavigate } from "react-router-dom";
-import { listarProjetos } from "../../servicos/projetos";
+import { listarProjetos } from "../../servicos/projeto";
 
 function Projetos() {
   const navigate = useNavigate();

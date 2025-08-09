@@ -1,3 +1,4 @@
+/* Fundo full screen com overlay degradê */
 .bg-container {
   background-image: url("/src/assets/background.png");
   background-size: cover;
@@ -6,22 +7,161 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  padding: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
 }
 
+.bg-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10, 25, 47, 0.85), rgba(2, 10, 20, 0.95));
+  z-index: 0;
+  pointer-events: none;
+  backdrop-filter: brightness(0.7);
+}
+
+/* Container do formulário */
 .container-login {
+  position: relative;
+  z-index: 1;
+  background: rgba(20, 30, 50, 0.9);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow:
+    0 0 12px rgba(0, 150, 255, 0.3),
+    0 0 40px rgba(0, 120, 255, 0.2);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background-color: rgba(245, 245, 245, 0.9);
-  border-radius: 10px;
-  padding: 30px;
+  gap: 1.8rem;
+  color: #cbd6e8;
+  transition: box-shadow 0.3s ease;
 }
 
-#exampleFormControlInput1 {
-  border-color: blue;
+.container-login:hover,
+.container-login:focus-within {
+  box-shadow:
+    0 0 18px rgba(0, 200, 255, 0.5),
+    0 0 50px rgba(0, 150, 255, 0.6);
 }
 
-#inputPassword6 {
-  border-color: blue;
+/* Logo */
+.logo {
+  margin-bottom: 2rem;
+  user-select: none;
+  filter: drop-shadow(0 0 6px #ffffff);
+  transition: filter 0.3s ease;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 10px #ffffff);
+}
+
+/* Inputs */
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  border: 2px solid #0099ffaa;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: #d0e9ff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  outline-offset: 3px;
+}
+
+.form-input::placeholder {
+  color: #9db9d9;
+  font-style: italic;
+}
+
+.form-input:focus {
+  border-color: #00ccff;
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 8px #00cfffcc;
+  outline: none;
+}
+
+/* Checkbox container */
+.form-check {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.9rem;
+  color: #a0b5d1;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Checkbox input */
+.form-check-input {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #00aaff;
+  transition: box-shadow 0.3s ease;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 6px #00ccffaa;
+  outline: none;
+}
+
+/* Botão login */
+.btn-login {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #00aaff, #0066cc);
+  color: white;
+  font-weight: 700;
+  font-size: 1.15rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow:
+    0 0 10px #00aaffcc,
+    inset 0 0 8px #33bbffcc;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.btn-login:hover,
+.btn-login:focus {
+  background: linear-gradient(135deg, #33bbff, #004a99);
+  box-shadow:
+    0 0 18px #33bbffcc,
+    inset 0 0 12px #00ccffcc;
+  outline: none;
+  transform: scale(1.03);
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .container-login {
+    padding: 2.2rem 1.8rem;
+    max-width: 320px;
+    gap: 1.4rem;
+  }
+
+  .form-input {
+    font-size: 0.95rem;
+  }
+
+  .btn-login {
+    font-size: 1rem;
+    padding: 0.9rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .btn-login {
+    font-size: 0.9rem;
+    padding: 0.8rem;
+  }
 }

@@ -1,70 +1,192 @@
-# Getting Started with Create React App
+# Sistema de Gestão de Projetos (SGP)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Um sistema completo para gerenciamento de projetos, usuários e tarefas, desenvolvido com React e integração com API REST.
 
-## Available Scripts
+## 📋 Sobre o Projeto
 
-In the project directory, you can run:
+O Sistema de Gestão de Projetos é uma aplicação web moderna que permite o controle completo de projetos, usuários e tarefas. Com uma interface intuitiva e recursos avançados de visualização, o sistema oferece dashboards com gráficos interativos para acompanhamento do progresso dos projetos.
 
-### `npm start`
+## ✨ Funcionalidades
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🔐 Autenticação
+- Sistema de login seguro
+- Opção de manter usuário conectado
+- Controle de sessão (localStorage/sessionStorage)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 👥 Gestão de Usuários
+- Cadastro completo de usuários
+- Edição e exclusão de registros
+- Controle de status (Ativo/Inativo)
+- Validação de dados (CPF, email, etc.)
 
-### `npm test`
+### 📊 Gestão de Projetos
+- Criação e edição de projetos
+- Associação de responsáveis
+- Listagem de tarefas vinculadas
+- Controle de exclusão com confirmação
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### ✅ Gestão de Tarefas
+- Criação de tarefas com múltiplas propriedades
+- Controle de prioridade (Alta, Média, Baixa)
+- Acompanhamento de status (Pendente, Fazendo, Finalizada)
+- Atribuição de tarefas para usuários
+- Vinculação com projetos
 
-### `npm run build`
+### 📈 Dashboard Analytics
+- Gráficos de barras para status das tarefas por projeto
+- Gráficos de barras horizontais para prioridades
+- Gráfico de pizza para status de usuários
+- Visualizações responsivas e interativas
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Tecnologias Utilizadas
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Frontend
+- **React** 18+ - Biblioteca principal
+- **React Router DOM** - Roteamento
+- **Bootstrap** 5 - Framework CSS
+- **Chart.js** + **React-Chartjs-2** - Gráficos interativos
+- **Axios** - Cliente HTTP
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Ferramentas de Desenvolvimento
+- **Create React App** - Setup inicial
+- **ES6+** - JavaScript moderno
+- **CSS3** - Estilização customizada
 
-### `npm run eject`
+## 📁 Estrutura do Projeto
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+src/
+├── arquivos/
+│   └── imagens/           # Assets e imagens
+├── componentes/           # Componentes reutilizáveis
+│   ├── Alerta/           # Componente de alertas
+│   ├── Botao/            # Componente de botão customizado
+│   ├── Cabecalho/        # Header da aplicação
+│   ├── Modal/            # Componente de modal
+│   └── Rodape/           # Footer da aplicação
+├── contextos/            # Context API
+│   └── GlobalContext.js  # Estado global da aplicação
+├── mocks/                # Dados mockados
+│   ├── projetos.js
+│   ├── tarefas.js
+│   └── usuarios.js
+├── paginas/              # Páginas da aplicação
+│   ├── Dashboard/        # Página principal com gráficos
+│   ├── Login/            # Página de autenticação
+│   ├── Pagina404/        # Página de erro 404
+│   ├── Projetos/         # CRUD de projetos
+│   ├── Tarefas/          # CRUD de tarefas
+│   └── Usuarios/         # CRUD de usuários
+├── rotas/                # Configuração de rotas
+├── servicos/             # Serviços de API
+│   ├── api.js           # Configuração do Axios
+│   ├── projetos.js      # Endpoints de projetos
+│   ├── tarefas.js       # Endpoints de tarefas
+│   └── usuarios.js      # Endpoints de usuários
+└── utils/                # Utilitários
+    └── data.js           # Funções de formatação
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🚀 Como Executar
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Pré-requisitos
+- Node.js 16+
+- npm ou yarn
+- API Backend rodando na porta 8080
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Instalação
 
-## Learn More
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/seu-usuario/sgp-frontend.git
+   cd sgp-frontend
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. **Instale as dependências**
+   ```bash
+   npm install
+   # ou
+   yarn install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. **Configure a API**
+   - Certifique-se de que a API backend está rodando em `http://localhost:8080`
+   - Ajuste a URL base no arquivo `src/servicos/api.js` se necessário
 
-### Code Splitting
+4. **Execute o projeto**
+   ```bash
+   npm start
+   # ou
+   yarn start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+5. **Acesse a aplicação**
+   - Abra o navegador em `http://localhost:3000`
 
-### Analyzing the Bundle Size
+## 🔧 Configuração da API
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+O projeto está configurado para consumir uma API REST. Certifique-se de que os seguintes endpoints estejam disponíveis:
 
-### Making a Progressive Web App
+### Endpoints Necessários
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### Usuários
+- `GET /usuarios` - Listar usuários
+- `POST /usuarios` - Criar usuário
+- `GET /usuarios/{id}` - Obter usuário por ID
+- `PUT /usuarios/{id}` - Atualizar usuário
+- `DELETE /usuarios/{id}` - Excluir usuário
 
-### Advanced Configuration
+#### Projetos
+- `GET /projetos` - Listar projetos
+- `POST /projetos` - Criar projeto
+- `GET /projetos/{id}` - Obter projeto por ID
+- `PUT /projetos/{id}` - Atualizar projeto
+- `DELETE /projetos/{id}` - Excluir projeto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+#### Tarefas
+- `GET /tarefas` - Listar tarefas
+- `POST /tarefas` - Criar tarefa
+- `GET /tarefas/{id}` - Obter tarefa por ID
+- `PUT /tarefas/{id}` - Atualizar tarefa
+- `DELETE /tarefas/{id}` - Excluir tarefa
 
-### Deployment
+## 📊 Recursos do Dashboard
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+O dashboard oferece visualizações avançadas dos dados:
 
-### `npm run build` fails to minify
+- **Status das Tarefas por Projeto**: Gráfico de barras verticais mostrando a distribuição de tarefas (Pendente, Fazendo, Finalizada) para cada projeto
+- **Prioridade das Tarefas por Projeto**: Gráfico de barras horizontais exibindo a distribuição de prioridades (Alta, Média, Baixa) por projeto
+- **Status dos Usuários**: Gráfico de pizza mostrando a proporção de usuários ativos e inativos
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 🎨 Interface e UX
+
+- **Design Responsivo**: Compatível com desktop, tablet e mobile
+- **Bootstrap 5**: Interface moderna e consistente
+- **Modais de Confirmação**: Ações críticas requerem confirmação
+- **Navegação Intuitiva**: Menu principal com acesso rápido a todas as funcionalidades
+- **Feedback Visual**: Alertas e mensagens informativas
+
+## 🔒 Segurança
+
+- Validação de formulários no frontend
+- Controle de sessão de usuário
+- Confirmação para ações destrutivas
+- Tratamento de erros da API
+
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 👥 Autor
+
+Desenvolvido por **Vitor Santos**.
+
+⭐ **Dê uma estrela se este projeto te ajudou!**

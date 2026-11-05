@@ -1,10 +1,21 @@
-import { useEffect, useState } from "react";
-import Cabecalho from "../../../componentes/Cabecalho";
-import Rodape from "../../../componentes/Rodape";
-import Modal from "../../../componentes/Modal";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Formulario from "../../../componentes/Formulario";
+import Input from "../../../componentes/Input";
+import PaginaTopo from "../../../componentes/PaginaTopo";
+import { useCarga } from "../../../hooks/useCarga";
+import { exigir, useFormulario, validarCpf, validarEmail } from "../../../hooks/useFormulario";
 import { atualizarUsuario, obterUsuarioPeloId, salvarUsuario } from "../../../servicos/usuarios";
 import { formatarData } from "../../../utils/data";
+import { STATUS_USUARIO, opcoesDe } from "../../../utils/rotulos";
+
+const REGRAS = {
+    nome: exigir("Informe o nome completo."),
+    cpf: validarCpf,
+    email: validarEmail,
+    dataNascimento: exigir("Informe a data de nascimento."),
+    status: exigir("Escolha o status."),
+};
 
 function UsuarioForm() {
     const navigate = useNavigate();
@@ -16,146 +27,113 @@ function UsuarioForm() {
     const [senha, setSenha] = useState("");
     const [dataNascimento, setDataNascimento] = useState("");
     const [status, setStatus] = useState("");
-    const [exibirModal, setExibirModal] = useState(false);
 
-    useEffect(() => {
-        if (id) {
-            obterUsuarioPeloId(id, setNome, setCpf, setDataNascimento, setEmail, setSenha, setStatus);
-        }
-    }, []);
+    const carregar = useCallback((marcar) => obterUsuarioPeloId(
+        id,
+        (valor) => { marcar(); setNome(valor ?? ""); },
+        (valor) => setCpf(valor ?? ""),
+        (valor) => setDataNascimento(valor ?? ""),
+        (valor) => setEmail(valor ?? ""),
+        (valor) => setSenha(valor ?? ""),
+        (valor) => setStatus(valor ?? "")
+    ), [id]);
 
-    const enviarFormulario = async (e) => {
-        e.preventDefault();
+    const carga = useCarga(carregar, Boolean(id));
+    const voltar = () => navigate("/usuarios");
 
-        const dadosUsuario = {
-            nome,
-            cpf,
-            email,
-            senha,
-            dataNascimento: formatarData(dataNascimento),
-            status
-        }
+    const form = useFormulario({
+        regras: id ? REGRAS : { ...REGRAS, senha: exigir("Defina uma senha.") },
+        valores: { nome, cpf, email, senha, dataNascimento, status },
+        mensagem: `Usuário ${id ? "atualizado" : "cadastrado"} com sucesso!`,
+        aoConcluir: voltar,
+        salvar: async (sinalizar) => {
+            const dadosUsuario = {
+                nome,
+                cpf,
+                email,
+                senha,
+                dataNascimento: formatarData(dataNascimento),
+                status
+            };
 
-        console.log(dadosUsuario);
+            console.log(dadosUsuario);
 
-        if (id) {
-            await atualizarUsuario(id, dadosUsuario, setExibirModal);
-        } else {
-            await salvarUsuario(dadosUsuario, setExibirModal);
-        }
-    }
-
-    const cancelar = () => {
-        navigate("/usuarios");
-    }
-
-    const confirmarCadastro = () => {
-        setExibirModal(false);
-        navigate("/usuarios");
-    }
+            if (id) {
+                await atualizarUsuario(id, dadosUsuario, sinalizar);
+            } else {
+                await salvarUsuario(dadosUsuario, sinalizar);
+            }
+        },
+    });
 
     return (
         <>
-            <Cabecalho />
+            <PaginaTopo
+                titulo={id ? "Editar usuário" : "Novo usuário"}
+                voltar={{ para: "/usuarios", rotulo: "Usuários" }}
+            />
 
-            <section className="container mt-3" id="usuario-form">
-                <h1>Dados do Usuario</h1>
-
-                <form className="row g-3" onSubmit={enviarFormulario}>
-                    <div className="col-md-6 col-12">
-                        <label htmlFor="nome" className="form-label">Nome:</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="nome"
-                            placeholder="Digite seu nome completo"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="col-md-6 col-12">
-                        <label htmlFor="cpf" className="form-label">CPF:</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="cpf"
-                            placeholder="XXX.XXX.XXX-XX"
-                            value={cpf}
-                            onChange={(e) => setCpf(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="col-md-6 col-12">
-                        <label htmlFor="email" className="form-label">E-mail:</label>
-                        <input
-                            type="email"
-                            className="form-control"
-                            id="email"
-                            placeholder="nome@exemplo.com.br"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    {!id && (
-                        <div className="col-md-6 col-12">
-                            <label htmlFor="senha" className="form-label">Senha:</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="senha"
-                                placeholder="Nao compartilhe com ninguem."
-                                value={senha}
-                                onChange={(e) => setSenha(e.target.value)}
-                                required
-                            />
-                        </div>
-                    )}
-
-                    <div className="col-md-6 col-12">
-                        <label htmlFor="dataNascimento" className="form-label">Data de Nascimento:</label>
-                        <input
-                            type="date"
-                            className="form-control"
-                            id="dataNascimento"
-                            value={dataNascimento}
-                            onChange={(e) => setDataNascimento(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="col-md-6 col-12">
-                        <label htmlFor="status" className="form-label">Status</label>
-                        <select
-                            id="status"
-                            className="form-select"
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                            required
-                        >
-                            <option disabled value="">Escolha uma opcao...</option>
-                            <option value={"INATIVO"}>Inativo</option>
-                            <option value={"ATIVO"}>Ativo</option>
-                        </select>
-                    </div>
-                    <div className="col-12">
-                        <button type="submit" className="btn btn-primary">Salvar</button>
-                        <button className="btn btn-outline-primary ms-2" onClick={cancelar}>Cancelar</button>
-                    </div>
-                </form>
-
-                {exibirModal && (
-                    <Modal
-                        titulo={"Confirmacao"}
-                        texto={`Usuario ${id ? 'atualizado' : 'cadastrado'} com sucesso!`}
-                        txtBtn01={"OK"}
-                        onClickBtn01={confirmarCadastro}
+            <Formulario
+                estado={carga.estado}
+                aoRecarregar={carga.recarregar}
+                form={form}
+                textoSalvar="Salvar usuário"
+                aoCancelar={voltar}
+            >
+                <Input
+                    {...form.campo("nome")}
+                    rotulo="Nome"
+                    placeholder="Digite o nome completo"
+                    autoComplete="name"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                />
+                <Input
+                    {...form.campo("cpf")}
+                    rotulo="CPF"
+                    placeholder="000.000.000-00"
+                    inputMode="numeric"
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                />
+                <Input
+                    {...form.campo("email")}
+                    rotulo="E-mail"
+                    type="email"
+                    placeholder="nome@exemplo.com.br"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                {!id && (
+                    <Input
+                        {...form.campo("senha")}
+                        rotulo="Senha"
+                        type="password"
+                        placeholder="Não compartilhe com ninguém."
+                        autoComplete="new-password"
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
                     />
                 )}
-            </section>
-
-            <Rodape />
+                <Input
+                    {...form.campo("dataNascimento")}
+                    rotulo="Data de nascimento"
+                    type="date"
+                    value={dataNascimento}
+                    onChange={(e) => setDataNascimento(e.target.value)}
+                />
+                <Input
+                    {...form.campo("status")}
+                    rotulo="Status"
+                    as="select"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                >
+                    <option disabled value="">Escolha uma opção...</option>
+                    {opcoesDe(STATUS_USUARIO)}
+                </Input>
+            </Formulario>
         </>
     );
 }

@@ -1,10 +1,13 @@
 import { GlobalProvider } from "./contextos/GlobalContext";
+import { ToastProvider } from "./componentes/Toast";
 import Rotas from "./rotas";
 
 function App() {
   return (
     <GlobalProvider>
-      <Rotas />
+      <ToastProvider>
+        <Rotas />
+      </ToastProvider>
     </GlobalProvider>
   );
 }

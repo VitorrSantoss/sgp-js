@@ -1,106 +1,93 @@
-import { useEffect, useState } from "react";
-import Cabecalho from "../../componentes/Cabecalho";
-import Rodape from "../../componentes/Rodape";
-import { excluirProjetoPeloId, listarProjetos } from "../../servicos/projetos";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import Botao from "../../componentes/Botao";
+import BotaoIcone from "../../componentes/BotaoIcone";
+import EmptyState from "../../componentes/EmptyState";
+import Input from "../../componentes/Input";
 import Modal from "../../componentes/Modal";
+import PaginaTopo from "../../componentes/PaginaTopo";
+import TabelaDados from "../../componentes/TabelaDados";
+import BarraFiltros from "../../componentes/TabelaDados/BarraFiltros";
+import { useLista } from "../../hooks/useCarga";
+import { useExclusao } from "../../hooks/useExclusao";
+import { excluirProjetoPeloId, listarProjetos } from "../../servicos/projetos";
+import { casaBusca } from "../../utils/texto";
+
+const COLUNAS = [
+    { id: "nome", rotulo: "Nome", valor: (p) => p.nome, principal: true },
+    { id: "descricao", rotulo: "Descrição", valor: (p) => p.descricao },
+    { id: "responsavel", rotulo: "Responsável", valor: (p) => p.responsavel?.nome },
+];
 
 function Projetos() {
-    const navigate = useNavigate();
-    const [projetos, setProjetos] = useState([]);
-    const [exibirModal, setExibirModal] = useState(false);
-    const [projetoParaExcluir, setProjetoParaExcluir] = useState({});
+    const { itens, setItens, estado, recarregar } = useLista(listarProjetos);
+    const [busca, setBusca] = useState("");
 
-    useEffect(() => {
-        listarProjetos(setProjetos);
-    }, []);
+    const exclusao = useExclusao(
+        excluirProjetoPeloId,
+        (id) => setItens((lista) => lista.filter((p) => p.id !== id)),
+        "Projeto excluído."
+    );
 
-    const confirmarExclusao = (id) => {
-        setExibirModal(true);
-        setProjetoParaExcluir(id);
-    }
+    const vazia = estado === "pronto" && itens.length === 0;
+    const filtrando = busca !== "";
+    const visiveis = itens.filter((p) => casaBusca(busca, p.nome, p.descricao, p.responsavel?.nome));
+    const limpar = () => setBusca("");
 
-    const cancelarExclusao = () => {
-        setExibirModal(false);
-        setProjetoParaExcluir({});
-    }
-
-    const excluirProjeto = async () => {
-        await excluirProjetoPeloId(projetoParaExcluir, setExibirModal);
-
-        setProjetoParaExcluir({});
-        setProjetos(projetos.filter(u => u.id !== projetoParaExcluir));
-    }
+    const novo = <Botao para="/novo-projeto" icone={Plus} texto="Novo projeto" />;
 
     return (
         <>
-            <Cabecalho />
+            <PaginaTopo titulo="Projetos" descricao="Projetos em andamento e seus responsáveis." acao={!vazia && novo} />
 
-            <section className="container mt-3" id="projetos">
-                <div className="d-flex justify-content-between">
-                    <h1>Projetos Cadastrados</h1>
-                    <div>
-                        <a role="button" href="/novo-projeto" className="btn btn-primary">
-                            Novo Projeto
-                        </a>
-                    </div>
-                </div>
-
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Descricao</th>
-                            <th scope="col">Responsavel</th>
-                            <th scope="col">Opcoes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            projetos?.map((projeto) => (
-                                <tr key={projeto.id}>
-                                    <th scope="row">{projeto.id}</th>
-                                    <td>{projeto.nome}</td>
-                                    <td>{projeto.descricao}</td>
-                                    <td>{projeto.responsavel?.nome}</td>
-                                    <td>
-                                        <div className="btn-group" role="group">
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary"
-                                                onClick={() => navigate(`/projeto/${projeto.id}`)}
-                                            >
-                                                Editar
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-danger"
-                                                onClick={() => confirmarExclusao(projeto.id)}
-                                            >
-                                                Excluir
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-            </section>
-
-            {exibirModal && (
-                <Modal
-                    titulo={"Confirmacao de Exclusao"}
-                    texto={"Tem certeza que deseja excluir este projeto?"}
-                    txtBtn01={"Sim, excluir."}
-                    onClickBtn01={excluirProjeto}
-                    txtBtn02={"Cancelar"}
-                    onClickBtn02={cancelarExclusao}
-                />
+            {estado === "pronto" && !vazia && (
+                <BarraFiltros visiveis={visiveis.length} total={itens.length} filtrando={filtrando} aoLimpar={limpar}>
+                    <Input
+                        id="busca"
+                        rotulo="Buscar"
+                        type="search"
+                        placeholder="Nome, descrição ou responsável"
+                        value={busca}
+                        onChange={(e) => setBusca(e.target.value)}
+                    />
+                </BarraFiltros>
             )}
 
-            <Rodape />
+            <TabelaDados
+                rotulo="Projetos"
+                colunas={COLUNAS}
+                itens={visiveis}
+                estado={estado}
+                aoRecarregar={recarregar}
+                filtrando={filtrando}
+                aoLimpar={limpar}
+                vazio={
+                    <EmptyState
+                        robo
+                        titulo="Nenhum projeto cadastrado"
+                        texto="Crie o primeiro projeto para organizar as tarefas da equipe."
+                        acao={novo}
+                    />
+                }
+                acoes={(projeto) => (
+                    <>
+                        <BotaoIcone icone={PencilSimple} rotulo={`Editar ${projeto.nome}`} para={`/projeto/${projeto.id}`} />
+                        <BotaoIcone icone={Trash} perigo rotulo={`Excluir ${projeto.nome}`} aoClicar={() => exclusao.pedir(projeto)} />
+                    </>
+                )}
+            />
+
+            {exclusao.alvo && (
+                <Modal
+                    destrutivo
+                    titulo="Confirmação de exclusão"
+                    texto={`Tem certeza que deseja excluir o projeto ${exclusao.alvo.nome}? Esta ação não pode ser desfeita.`}
+                    txtBtn01="Sim, excluir"
+                    onClickBtn01={exclusao.confirmar}
+                    txtBtn02="Cancelar"
+                    onClickBtn02={exclusao.cancelar}
+                />
+            )}
         </>
     );
 }

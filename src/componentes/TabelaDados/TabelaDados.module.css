@@ -1,0 +1,155 @@
+.quadro,
+.moldura {
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-m);
+    background: var(--superficie);
+    box-shadow: var(--sombra-p);
+}
+
+.esqueleto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-3);
+    padding: var(--e-4);
+}
+
+.container {
+    container-type: inline-size;
+}
+
+.moldura {
+    overflow: hidden;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-p);
+}
+
+.tabela th,
+.tabela td {
+    padding: var(--e-2) var(--e-3);
+    border-bottom: 1px solid var(--borda);
+    font-weight: inherit;
+    text-align: left;
+    vertical-align: middle;
+    overflow-wrap: anywhere;
+}
+
+.tabela thead th {
+    background: var(--superficie-sutil);
+    color: var(--texto-suave);
+    font-size: var(--fs-xs);
+    font-weight: var(--peso-forte);
+    white-space: nowrap;
+}
+
+.tabela tbody tr:last-child th,
+.tabela tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tabela tbody tr {
+    transition: background-color var(--mov-hover) var(--curva);
+}
+
+.tabela tbody tr:hover {
+    background: var(--fundo);
+}
+
+.tabela tbody .principal {
+    color: var(--texto-titulo);
+    font-weight: var(--peso-medio);
+}
+
+.apoio {
+    display: block;
+    color: var(--texto-suave);
+    font-size: var(--fs-xs);
+    font-weight: 400;
+}
+
+.acoes {
+    width: 1%;
+}
+
+.acoes div {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--e-1);
+}
+
+/* Lista de cards */
+@container (max-width: 44.99rem) {
+    .moldura {
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
+    }
+
+    .tabela {
+        display: block;
+    }
+
+    .tabela thead {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+    }
+
+    .tabela tbody {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr));
+        gap: var(--e-3);
+    }
+
+    .tabela tbody tr {
+        display: flex;
+        flex-direction: column;
+        gap: var(--e-1);
+        padding: var(--e-3);
+        border: 1px solid var(--borda);
+        border-radius: var(--raio-m);
+        background: var(--superficie);
+        box-shadow: var(--sombra-p);
+    }
+
+    .tabela tbody th,
+    .tabela tbody td {
+        padding: 0;
+        border: 0;
+    }
+
+    .tabela tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--e-3);
+        text-align: right;
+    }
+
+    .tabela tbody td[data-rotulo]::before {
+        content: attr(data-rotulo);
+        flex: none;
+        color: var(--texto-suave);
+        font-size: var(--fs-xs);
+    }
+
+    .tabela tbody .principal {
+        display: block;
+        margin-bottom: var(--e-1);
+        font-size: var(--fs-m);
+    }
+
+    .tabela tbody .acoes {
+        display: block;
+        width: auto;
+        margin-top: var(--e-1);
+        padding-top: var(--e-1);
+        border-top: 1px solid var(--borda);
+    }
+}

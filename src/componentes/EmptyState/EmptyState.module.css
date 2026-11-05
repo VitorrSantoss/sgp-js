@@ -1,0 +1,47 @@
+.estado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--e-2);
+    padding: var(--e-6) var(--e-4);
+    text-align: center;
+}
+
+.robo {
+    width: 7rem;
+}
+
+.grande {
+    padding-top: var(--e-7);
+}
+
+.grande .robo {
+    width: min(15rem, 60vw);
+    margin-bottom: var(--e-3);
+}
+
+.icone {
+    color: var(--texto-suave);
+}
+
+.titulo {
+    font-size: var(--fs-m);
+}
+
+.grande .titulo {
+    font-size: var(--fs-xg);
+}
+
+.texto {
+    max-width: 28rem;
+    color: var(--texto-suave);
+    font-size: var(--fs-p);
+}
+
+.grande .texto {
+    font-size: var(--fs-m);
+}
+
+.acao {
+    margin-top: var(--e-2);
+}

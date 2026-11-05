@@ -1,12 +1,32 @@
-import { useEffect, useState } from "react";
-import Cabecalho from "../../../componentes/Cabecalho";
-import Rodape from "../../../componentes/Rodape";
-import Modal from "../../../componentes/Modal";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { atualizarTarefa, obterTarefaPeloId, salvarTarefa } from "../../../servicos/tarefas";
-import { formatarData } from "../../../utils/data";
+import Formulario from "../../../componentes/Formulario";
+import Input from "../../../componentes/Input";
+import PaginaTopo from "../../../componentes/PaginaTopo";
+import { useCarga, useLista } from "../../../hooks/useCarga";
+import { exigir, useFormulario } from "../../../hooks/useFormulario";
 import { listarProjetos } from "../../../servicos/projetos";
+import { atualizarTarefa, obterTarefaPeloId, salvarTarefa } from "../../../servicos/tarefas";
 import { listarUsuarios } from "../../../servicos/usuarios";
+import { formatarData } from "../../../utils/data";
+import { PRIORIDADE, STATUS_TAREFA, opcoesDe } from "../../../utils/rotulos";
+
+const REGRAS = {
+    titulo: exigir("Informe o título da tarefa."),
+    dataCriacao: exigir("Informe a data de criação."),
+    usuario: exigir("Escolha quem vai executar a tarefa."),
+    projeto: exigir("Escolha o projeto."),
+    prioridade: exigir("Escolha a prioridade."),
+    status: exigir("Escolha o status."),
+};
+
+function primeiraOpcao(lista) {
+    return (
+        <option disabled value="">
+            {lista.estado === "carregando" ? "Carregando..." : "Escolha uma opção..."}
+        </option>
+    );
+}
 
 function TarefaForm() {
     const navigate = useNavigate();
@@ -18,178 +38,142 @@ function TarefaForm() {
     const [prioridade, setPrioridade] = useState("");
     const [status, setStatus] = useState("");
     const [projetoId, setProjetoId] = useState("");
-    const [projetos, setProjetos] = useState([]);
     const [usuarioId, setUsuarioId] = useState("");
-    const [usuarios, setUsuarios] = useState([]);
-    const [exibirModal, setExibirModal] = useState(false);
+    const projetos = useLista(listarProjetos);
+    const usuarios = useLista(listarUsuarios);
 
-    useEffect(() => {
-        if (id) {
-            obterTarefaPeloId(id, setTitulo, setDataCriacao, setDataConclusao, setUsuarioId, setPrioridade, setStatus, setProjetoId);
-        }
+    const carregar = useCallback((marcar) => obterTarefaPeloId(
+        id,
+        (valor) => { marcar(); setTitulo(valor ?? ""); },
+        (valor) => setDataCriacao(valor ?? ""),
+        (valor) => setDataConclusao(valor ?? ""),
+        (valor) => setUsuarioId(valor ?? ""),
+        (valor) => setPrioridade(valor ?? ""),
+        (valor) => setStatus(valor ?? ""),
+        (valor) => setProjetoId(valor ?? "")
+    ), [id]);
 
-        listarProjetos(setProjetos);
-        listarUsuarios(setUsuarios);
-    }, []);
+    const carga = useCarga(carregar, Boolean(id));
+    const voltar = () => navigate("/tarefas");
 
-    const enviarFormulario = async (e) => {
-        e.preventDefault();
+    const form = useFormulario({
+        regras: REGRAS,
+        valores: { titulo, dataCriacao, usuario: usuarioId, projeto: projetoId, prioridade, status },
+        mensagem: `Tarefa ${id ? "atualizada" : "cadastrada"} com sucesso!`,
+        aoConcluir: voltar,
+        salvar: async (sinalizar) => {
+            const dadosTarefa = {
+                titulo,
+                dataCriacao: formatarData(dataCriacao),
+                dataConclusao: formatarData(dataConclusao),
+                prioridade,
+                status,
+                projeto: {
+                    id: projetoId
+                },
+                usuario: {
+                    id: usuarioId
+                }
+            };
 
-        const dadosTarefa = {
-            titulo,
-            dataCriacao: formatarData(dataCriacao),
-            dataConclusao: formatarData(dataConclusao),
-            prioridade,
-            status,
-            projeto: {
-                id: projetoId
-            },
-            usuario: {
-                id: usuarioId
+            console.log(dadosTarefa);
+
+            if (id) {
+                await atualizarTarefa(id, dadosTarefa, sinalizar);
+            } else {
+                await salvarTarefa(dadosTarefa, sinalizar);
             }
-        }
+        },
+    });
 
-        console.log(dadosTarefa);
-
-        if (id) {
-            await atualizarTarefa(id, dadosTarefa, setExibirModal);
-        } else {
-            await salvarTarefa(dadosTarefa, setExibirModal);
-        }
-    }
-
-    const cancelar = () => {
-        navigate("/tarefas");
-    }
-
-    const confirmarCadastro = () => {
-        setExibirModal(false);
-        navigate("/tarefas");
-    }
+    const campoUsuario = form.campo("usuario");
+    const campoProjeto = form.campo("projeto");
 
     return (
         <>
-            <Cabecalho />
+            <PaginaTopo
+                titulo={id ? "Editar tarefa" : "Nova tarefa"}
+                voltar={{ para: "/tarefas", rotulo: "Tarefas" }}
+            />
 
-            <section className="container mt-3" id="tarefa-form">
-                <h1>Dados da Tarefa</h1>
-
-                <form className="row g-3" onSubmit={enviarFormulario}>
-                    <div className="col-12">
-                        <label htmlFor="titulo" className="form-label">Titulo:</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="titulo"
-                            placeholder="Digite o titulo da tarefa"
-                            value={titulo}
-                            onChange={(e) => setTitulo(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="col-md-4 col-12">
-                        <label htmlFor="dataCriacao" className="form-label">Data de Criacao:</label>
-                        <input
-                            type="date"
-                            className="form-control"
-                            id="dataCriacao"
-                            value={dataCriacao}
-                            onChange={(e) => setDataCriacao(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="col-md-4 col-12">
-                        <label htmlFor="dataConclusao" className="form-label">Data de Conclusao:</label>
-                        <input
-                            type="date"
-                            className="form-control"
-                            id="dataConclusao"
-                            value={dataConclusao}
-                            onChange={(e) => setDataConclusao(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                        <label htmlFor="usuario" className="form-label">Atribuir para:</label>
-                        <select
-                            id="usuario"
-                            className="form-select"
-                            value={usuarioId}
-                            onChange={(e) => setUsuarioId(e.target.value)}
-                            required
-                        >
-                            <option disabled value="">Escolha uma opcao...</option>
-                            {usuarios?.map((usuario) => (
-                                <option value={usuario.id} key={usuario.id}>{usuario.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                        <label htmlFor="prioridade" className="form-label">Prioridade</label>
-                        <select
-                            id="prioridade"
-                            className="form-select"
-                            value={prioridade}
-                            onChange={(e) => setPrioridade(e.target.value)}
-                            required
-                        >
-                            <option disabled value="">Escolha uma opcao...</option>
-                            <option value={"ALTA"}>Alta</option>
-                            <option value={"MEDIA"}>Media</option>
-                            <option value={"BAIXA"}>Baixa</option>
-                        </select>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                        <label htmlFor="status" className="form-label">Status</label>
-                        <select
-                            id="status"
-                            className="form-select"
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                            required
-                        >
-                            <option disabled value="">Escolha uma opcao...</option>
-                            <option value={"PENDENTE"}>Pendente</option>
-                            <option value={"FAZENDO"}>Fazendo</option>
-                            <option value={"FINALIZADA"}>Finalizada</option>
-                        </select>
-                    </div>
-
-                    <div className="col-md-4 col-12">
-                        <label htmlFor="projeto" className="form-label">Projeto:</label>
-                        <select
-                            id="projeto"
-                            className="form-select"
-                            value={projetoId}
-                            onChange={(e) => setProjetoId(e.target.value)}
-                            required
-                        >
-                            <option disabled value="">Escolha uma opcao...</option>
-                            {projetos?.map((projeto) => (
-                                <option value={projeto.id} key={projeto.id}>{projeto.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="col-12">
-                        <button type="submit" className="btn btn-primary">Salvar</button>
-                        <button className="btn btn-outline-primary ms-2" onClick={cancelar}>Cancelar</button>
-                    </div>
-                </form>
-
-                {exibirModal && (
-                    <Modal
-                        titulo={"Confirmacao"}
-                        texto={`Tarefa ${id ? 'atualizada' : 'cadastrada'} com sucesso!`}
-                        txtBtn01={"OK"}
-                        onClickBtn01={confirmarCadastro}
-                    />
-                )}
-            </section>
-
-            <Rodape />
+            <Formulario
+                estado={carga.estado}
+                aoRecarregar={carga.recarregar}
+                form={form}
+                textoSalvar="Salvar tarefa"
+                aoCancelar={voltar}
+            >
+                <Input
+                    {...form.campo("titulo")}
+                    rotulo="Título"
+                    placeholder="Digite o título da tarefa"
+                    larga
+                    value={titulo}
+                    onChange={(e) => setTitulo(e.target.value)}
+                />
+                <Input
+                    {...form.campo("dataCriacao")}
+                    rotulo="Data de criação"
+                    type="date"
+                    value={dataCriacao}
+                    onChange={(e) => setDataCriacao(e.target.value)}
+                />
+                <Input
+                    id="dataConclusao"
+                    rotulo="Data de conclusão"
+                    type="date"
+                    value={dataConclusao}
+                    onChange={(e) => setDataConclusao(e.target.value)}
+                />
+                <Input
+                    {...campoUsuario}
+                    rotulo="Atribuir para"
+                    as="select"
+                    value={usuarioId}
+                    onChange={(e) => setUsuarioId(e.target.value)}
+                    erro={campoUsuario.erro
+                        || (usuarios.estado === "erro" ? "Não foi possível carregar os usuários." : "")}
+                >
+                    {primeiraOpcao(usuarios)}
+                    {usuarios.itens.map((usuario) => (
+                        <option key={usuario.id} value={usuario.id}>{usuario.nome}</option>
+                    ))}
+                </Input>
+                <Input
+                    {...campoProjeto}
+                    rotulo="Projeto"
+                    as="select"
+                    value={projetoId}
+                    onChange={(e) => setProjetoId(e.target.value)}
+                    erro={campoProjeto.erro
+                        || (projetos.estado === "erro" ? "Não foi possível carregar os projetos." : "")}
+                >
+                    {primeiraOpcao(projetos)}
+                    {projetos.itens.map((projeto) => (
+                        <option key={projeto.id} value={projeto.id}>{projeto.nome}</option>
+                    ))}
+                </Input>
+                <Input
+                    {...form.campo("prioridade")}
+                    rotulo="Prioridade"
+                    as="select"
+                    value={prioridade}
+                    onChange={(e) => setPrioridade(e.target.value)}
+                >
+                    <option disabled value="">Escolha uma opção...</option>
+                    {opcoesDe(PRIORIDADE)}
+                </Input>
+                <Input
+                    {...form.campo("status")}
+                    rotulo="Status"
+                    as="select"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value)}
+                >
+                    <option disabled value="">Escolha uma opção...</option>
+                    {opcoesDe(STATUS_TAREFA)}
+                </Input>
+            </Formulario>
         </>
     );
 }

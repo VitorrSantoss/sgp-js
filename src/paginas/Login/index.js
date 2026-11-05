@@ -1,85 +1,88 @@
-import './login.css';
-import logo from '../../arquivos/imagens/sgp_logo_vertical.png';
-import { useContext, useState } from 'react';
-import { GlobalContext } from '../../contextos/GlobalContext';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import logo from "../../arquivos/imagens/sgp_logo_vertical.png";
+import Botao from "../../componentes/Botao";
+import Input from "../../componentes/Input";
+import { GlobalContext } from "../../contextos/GlobalContext";
+import { exigir, useFormulario, validarEmail } from "../../hooks/useFormulario";
+import estilos from "./Login.module.css";
+
+const REGRAS = {
+    email: validarEmail,
+    senha: exigir("Informe a senha."),
+};
 
 function Login() {
     const { login } = useContext(GlobalContext);
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
     const [manterConectado, setManterConectado] = useState(true);
-    const [erro, setErro] = useState('');
-    const navigate = useNavigate(); // hook do react-router-dom
 
-    const fazerLogin = (e) => {
-        e.preventDefault();
+    const form = useFormulario({
+        regras: REGRAS,
+        valores: { email, senha },
+        aoConcluir: () => navigate("/dashboard"),
+        salvar: async (sinalizar) => {
+            login({ email, senha, manterConectado });
+            sinalizar();
+        },
+    });
 
-        if (email === '' || senha === '') {
-            setErro("Preencha todos os campos!");
-            return; // evita continuar se os campos estiverem vazios
-        }
-
-        // chama a função de login do contexto
-        login({ email, senha, manterConectado });
-
-        // depois do login, redireciona para o dashboard
-        navigate("/dashboard");
-    };
+    useEffect(() => {
+        document.title = "Entrar | SGP";
+    }, []);
 
     return (
-        <div className="bg-container">
-            <div className='container'>
-                <div className='row justify-content-center'>
-                    <form className='col-md-5 col-10 login-container' onSubmit={fazerLogin}>
-                        <div className='row justify-content-center my-4'>
-                            <div className='col-8'>
-                                <div className='d-flex justify-content-center'>
-                                    <img src={logo} alt="Sistema de Gerenciamento de Projetos" width="200px" />
-                                </div>
+        <div className={estilos.tela}>
+            <main className={estilos.lado}>
+                <div className={estilos.caixa}>
+                    <img src={logo} alt="Sistema de Gestão de Projetos" width="500" height="500" className={estilos.logo} />
 
-                                <div className='d-flex justify-content-center'>
-                                    <span className='text-danger mb-2'>{erro}</span>
-                                </div>
+                    <h1 className={estilos.titulo}>Acesse sua conta</h1>
 
-                                <input
-                                    type='email'
-                                    className='form-control border border-primary mb-2'
-                                    placeholder='E-mail'
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
+                    <form onSubmit={form.enviar} noValidate className={estilos.campos}>
+                        <Input
+                            {...form.campo("email")}
+                            rotulo="E-mail"
+                            type="email"
+                            autoComplete="email"
+                            placeholder="nome@exemplo.com.br"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Input
+                            {...form.campo("senha")}
+                            rotulo="Senha"
+                            type="password"
+                            autoComplete="current-password"
+                            value={senha}
+                            onChange={(e) => setSenha(e.target.value)}
+                        />
 
-                                <input
-                                    type='password'
-                                    className='form-control border border-primary mb-2'
-                                    placeholder='Senha'
-                                    value={senha}
-                                    onChange={(e) => setSenha(e.target.value)}
-                                />
-
-                                <div className='form-check text-start my-3'>
-                                    <input
-                                        className='form-check-input'
-                                        type='checkbox'
-                                        defaultChecked={manterConectado}
-                                        onChange={() => setManterConectado(!manterConectado)}
-                                    />
-                                    <label className='form-check-label text-dark'>
-                                        Mantenha-me conectado
-                                    </label>
-                                </div>
-
-                                <div className='d-flex justify-content-center'>
-                                    <button type='submit' className='btn btn-primary mt-2 px-4'>Acessar</button>
-                                </div>
-                            </div>
+                        <div className={estilos.manter}>
+                            <input
+                                id="manterConectado"
+                                type="checkbox"
+                                checked={manterConectado}
+                                onChange={(e) => setManterConectado(e.target.checked)}
+                            />
+                            <label htmlFor="manterConectado">Mantenha-me conectado</label>
                         </div>
+
+                        <Botao tipo="submit" tamanho="lg" texto="Acessar" carregando={form.enviando} />
                     </form>
                 </div>
-            </div>
+            </main>
+
+            <aside className={estilos.painel}>
+                <div className={estilos.mensagem}>
+                    <p className={estilos.chamada}>Projetos, tarefas e equipes em um só lugar.</p>
+                    <p>Acompanhe o andamento do trabalho e o que precisa de atenção hoje.</p>
+                </div>
+            </aside>
         </div>
-    )
+    );
 }
 
 export default Login;

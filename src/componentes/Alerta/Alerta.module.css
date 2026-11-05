@@ -1,0 +1,32 @@
+.alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--e-2);
+    padding: var(--e-3);
+    border-radius: var(--raio-m);
+    font-size: var(--fs-p);
+}
+
+.icone {
+    flex: none;
+}
+
+.primary {
+    background: var(--tom-info-fundo);
+    color: var(--tom-info);
+}
+
+.success {
+    background: var(--tom-sucesso-fundo);
+    color: var(--tom-sucesso);
+}
+
+.warning {
+    background: var(--tom-ambar-fundo);
+    color: var(--tom-ambar);
+}
+
+.danger {
+    background: var(--tom-perigo-fundo);
+    color: var(--tom-perigo);
+}

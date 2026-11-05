@@ -1,0 +1,33 @@
+.botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--controle);
+    height: var(--controle);
+    padding: 0;
+    border: 0;
+    border-radius: var(--raio-p);
+    background: transparent;
+    color: var(--acao);
+    cursor: pointer;
+    transition:
+        background-color var(--mov-hover) var(--curva),
+        transform var(--mov-clique) var(--curva);
+}
+
+.botao:hover {
+    background: var(--tom-info-fundo);
+}
+
+.botao:active {
+    transform: scale(0.96);
+}
+
+.perigo {
+    color: var(--perigo);
+}
+
+.perigo:hover {
+    background: var(--tom-perigo-fundo);
+}

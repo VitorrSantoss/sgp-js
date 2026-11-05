@@ -1,0 +1,58 @@
+.fundo {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--e-4);
+    background: var(--overlay);
+    overflow-y: auto;
+    animation: surgir var(--mov-painel) var(--curva);
+}
+
+.painel {
+    width: 100%;
+    max-width: 28rem;
+    padding: var(--e-5);
+    border-radius: var(--raio-g);
+    background: var(--superficie);
+    box-shadow: var(--sombra-g);
+    animation: subir var(--mov-painel) var(--curva);
+}
+
+.topo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--e-3);
+}
+
+.titulo {
+    font-size: var(--fs-g);
+}
+
+.texto {
+    margin-top: var(--e-3);
+}
+
+.acoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--e-2);
+    margin-top: var(--e-5);
+}
+
+@keyframes surgir {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes subir {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}

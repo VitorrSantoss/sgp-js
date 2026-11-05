@@ -1,0 +1,97 @@
+.tela {
+    display: grid;
+    min-height: 100dvh;
+    background: var(--superficie);
+}
+
+.lado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--e-5) var(--e-4);
+}
+
+.caixa {
+    width: 100%;
+    max-width: 22rem;
+}
+
+.logo {
+    width: 11rem;
+    margin: 0 auto var(--e-2);
+}
+
+.titulo {
+    margin-bottom: var(--e-5);
+    font-size: var(--fs-g);
+    text-align: center;
+}
+
+.campos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-4);
+}
+
+.manter {
+    display: flex;
+    align-items: center;
+    min-height: var(--controle);
+    font-size: var(--fs-p);
+}
+
+.manter input {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    accent-color: var(--acao);
+    cursor: pointer;
+}
+
+.manter label {
+    padding: var(--e-3) var(--e-2);
+    cursor: pointer;
+}
+
+/* Foto com overlay marinho: some no mobile para priorizar o formulário */
+.painel {
+    display: none;
+    position: relative;
+    background: url("../../arquivos/imagens/background.png") center / cover no-repeat;
+}
+
+.painel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-login);
+}
+
+.mensagem {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--e-2);
+    height: 100%;
+    max-width: 34rem;
+    padding: var(--e-7);
+    color: var(--texto-invertido);
+}
+
+.chamada {
+    font-size: 2rem;
+    font-weight: var(--peso-forte);
+    line-height: var(--linha-titulo);
+    text-wrap: balance;
+}
+
+@media (min-width: 56rem) {
+    .tela {
+        grid-template-columns: minmax(26rem, 2fr) 3fr;
+    }
+
+    .painel {
+        display: block;
+    }
+}

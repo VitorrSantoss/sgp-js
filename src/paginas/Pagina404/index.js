@@ -1,22 +1,22 @@
-import Alerta from "../../componentes/Alerta";
-import Cabecalho from "../../componentes/Cabecalho";
-import Rodape from "../../componentes/Rodape";
-import robo from "../../arquivos/imagens/robo_404.png";
+import { useEffect } from "react";
+import { House } from "@phosphor-icons/react";
+import Botao from "../../componentes/Botao";
+import EmptyState from "../../componentes/EmptyState";
 
 function Pagina404() {
+    useEffect(() => {
+        document.title = "Página não encontrada | SGP";
+    }, []);
+
     return (
-        <>
-            <Cabecalho />
-
-            <div className="container mt-3">
-                <Alerta cor="warning" mensagem="Esta pagina nao existe!" />
-                <div className="d-flex justify-content-center">
-                    <img src={robo} alt="Erro 404 - Not Found" width={"30%"} />
-                </div>
-            </div>
-
-            <Rodape />
-        </>
+        <EmptyState
+            grande
+            robo
+            nivel="h1"
+            titulo="Página não encontrada"
+            texto="O endereço pode estar incorreto ou a página pode ter sido removida."
+            acao={<Botao para="/dashboard" icone={House} texto="Voltar ao dashboard" />}
+        />
     );
 }
 

@@ -1,110 +1,113 @@
-import { useEffect, useState } from "react";
-import Cabecalho from "../../componentes/Cabecalho";
-import Rodape from "../../componentes/Rodape";
-import { excluirUsuarioPeloId, listarUsuarios } from "../../servicos/usuarios";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import Badge from "../../componentes/Badge";
+import Botao from "../../componentes/Botao";
+import BotaoIcone from "../../componentes/BotaoIcone";
+import EmptyState from "../../componentes/EmptyState";
+import Input from "../../componentes/Input";
 import Modal from "../../componentes/Modal";
+import PaginaTopo from "../../componentes/PaginaTopo";
+import TabelaDados from "../../componentes/TabelaDados";
+import BarraFiltros from "../../componentes/TabelaDados/BarraFiltros";
+import { useLista } from "../../hooks/useCarga";
+import { useExclusao } from "../../hooks/useExclusao";
+import { excluirUsuarioPeloId, listarUsuarios } from "../../servicos/usuarios";
+import { STATUS_USUARIO, opcoesDe } from "../../utils/rotulos";
+import { casaBusca } from "../../utils/texto";
+
+const COLUNAS = [
+    { id: "nome", rotulo: "Nome", valor: (u) => u.nome, principal: true },
+    { id: "cpf", rotulo: "CPF", valor: (u) => <span className="num">{u.cpf}</span> },
+    { id: "email", rotulo: "E-mail", valor: (u) => u.email, larguraMinima: "14rem" },
+    { id: "idade", rotulo: "Idade", valor: (u) => u.idade && <span className="num">{u.idade}</span> },
+    { id: "status", rotulo: "Status", valor: (u) => <Badge valor={u.status} mapa={STATUS_USUARIO} /> },
+];
 
 function Usuarios() {
-    const navigate = useNavigate();
-    const [usuarios, setUsuarios] = useState([]);
-    const [exibirModal, setExibirModal] = useState(false);
-    const [usuarioParaExcluir, setUsuarioParaExcluir] = useState({});
+    const { itens, setItens, estado, recarregar } = useLista(listarUsuarios);
+    const [busca, setBusca] = useState("");
+    const [status, setStatus] = useState("");
 
-    useEffect(() => {
-        listarUsuarios(setUsuarios);
-    }, []);
+    const exclusao = useExclusao(
+        excluirUsuarioPeloId,
+        (id) => setItens((lista) => lista.filter((u) => u.id !== id)),
+        "Usuário excluído."
+    );
 
-    const confirmarExclusao = (id) => {
-        setExibirModal(true);
-        setUsuarioParaExcluir(id);
-    }
+    const vazia = estado === "pronto" && itens.length === 0;
+    const filtrando = busca !== "" || status !== "";
+    const visiveis = itens.filter((u) =>
+        casaBusca(busca, u.nome, u.email, u.cpf) && (status === "" || u.status === status)
+    );
+    const limpar = () => {
+        setBusca("");
+        setStatus("");
+    };
 
-    const cancelarExclusao = () => {
-        setExibirModal(false);
-        setUsuarioParaExcluir({});
-    }
-
-    const excluirUsuario = async () => {
-        await excluirUsuarioPeloId(usuarioParaExcluir, setExibirModal);
-
-        setUsuarioParaExcluir({});
-        setUsuarios(usuarios.filter(u => u.id !== usuarioParaExcluir));
-    }
+    const novo = <Botao para="/novo-usuario" icone={Plus} texto="Novo usuário" />;
 
     return (
         <>
-            <Cabecalho />
+            <PaginaTopo titulo="Usuários" descricao="Pessoas com acesso ao sistema." acao={!vazia && novo} />
 
-            <section className="container mt-3" id="usuarios">
-                <div className="d-flex justify-content-between">
-                    <h1>Usuarios Cadastrados</h1>
-                    <div>
-                        <a role="button" href="/novo-usuario" className="btn btn-primary">
-                            Novo Usuario
-                        </a>
-                    </div>
-                </div>
-
-                <table className="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">CPF</th>
-                            <th scope="col">E-mail</th>
-                            <th scope="col">Idade</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Opcoes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            usuarios?.map((usuario) => (
-                                <tr key={usuario.id}>
-                                    <th scope="row">{usuario.id}</th>
-                                    <td>{usuario.nome}</td>
-                                    <td>{usuario.cpf}</td>
-                                    <td>{usuario.email}</td>
-                                    <td>{usuario.idade}</td>
-                                    <td>{usuario.status}</td>
-                                    <td>
-                                        <div className="btn-group" role="group">
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary"
-                                                onClick={() => navigate(`/usuario/${usuario.id}`)}
-                                            >
-                                                Editar
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-danger"
-                                                onClick={() => confirmarExclusao(usuario.id)}
-                                            >
-                                                Excluir
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-            </section>
-
-            {exibirModal && (
-                <Modal
-                    titulo={"Confirmacao de Exclusao"}
-                    texto={"Tem certeza que deseja excluir este usuario?"}
-                    txtBtn01={"Sim, excluir."}
-                    onClickBtn01={excluirUsuario}
-                    txtBtn02={"Cancelar"}
-                    onClickBtn02={cancelarExclusao}
-                />
+            {estado === "pronto" && !vazia && (
+                <BarraFiltros visiveis={visiveis.length} total={itens.length} filtrando={filtrando} aoLimpar={limpar}>
+                    <Input
+                        id="busca"
+                        rotulo="Buscar"
+                        type="search"
+                        placeholder="Nome, e-mail ou CPF"
+                        value={busca}
+                        onChange={(e) => setBusca(e.target.value)}
+                    />
+                    <Input
+                        id="filtro-status"
+                        rotulo="Status"
+                        as="select"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
+                    >
+                        <option value="">Todos</option>
+                        {opcoesDe(STATUS_USUARIO)}
+                    </Input>
+                </BarraFiltros>
             )}
 
-            <Rodape />
+            <TabelaDados
+                rotulo="Usuários"
+                colunas={COLUNAS}
+                itens={visiveis}
+                estado={estado}
+                aoRecarregar={recarregar}
+                filtrando={filtrando}
+                aoLimpar={limpar}
+                vazio={
+                    <EmptyState
+                        robo
+                        titulo="Nenhum usuário cadastrado"
+                        texto="Cadastre o primeiro usuário para atribuir projetos e tarefas."
+                        acao={novo}
+                    />
+                }
+                acoes={(usuario) => (
+                    <>
+                        <BotaoIcone icone={PencilSimple} rotulo={`Editar ${usuario.nome}`} para={`/usuario/${usuario.id}`} />
+                        <BotaoIcone icone={Trash} perigo rotulo={`Excluir ${usuario.nome}`} aoClicar={() => exclusao.pedir(usuario)} />
+                    </>
+                )}
+            />
+
+            {exclusao.alvo && (
+                <Modal
+                    destrutivo
+                    titulo="Confirmação de exclusão"
+                    texto={`Tem certeza que deseja excluir o usuário ${exclusao.alvo.nome}? Esta ação não pode ser desfeita.`}
+                    txtBtn01="Sim, excluir"
+                    onClickBtn01={exclusao.confirmar}
+                    txtBtn02="Cancelar"
+                    onClickBtn02={exclusao.cancelar}
+                />
+            )}
         </>
     );
 }

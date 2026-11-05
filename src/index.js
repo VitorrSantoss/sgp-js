@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import '@fontsource/fira-sans/400.css';
+import '@fontsource/fira-sans/500.css';
+import '@fontsource/fira-sans/600.css';
+import './styles/tokens.css';
+import './styles/global.css';
 import App from './App';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

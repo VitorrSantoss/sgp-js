@@ -1,0 +1,15 @@
+.campos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+    gap: var(--e-3);
+}
+
+.resumo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-2);
+    min-height: var(--controle);
+    color: var(--texto-suave);
+    font-size: var(--fs-xs);
+}

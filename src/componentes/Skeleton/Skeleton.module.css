@@ -1,0 +1,24 @@
+.area {
+    /* O atraso evita o flash quando a API responde na hora. */
+    animation: aparecer var(--mov-painel) 150ms both;
+}
+
+.bloco {
+    display: block;
+    width: 100%;
+    border-radius: var(--raio-p);
+    background: var(--superficie-sutil);
+    animation: pulsar 1400ms ease-in-out infinite;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+    }
+}
+
+@keyframes pulsar {
+    50% {
+        opacity: 0.5;
+    }
+}

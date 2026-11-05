@@ -1,0 +1,83 @@
+.area {
+    position: fixed;
+    right: var(--e-4);
+    bottom: var(--e-4);
+    left: var(--e-4);
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--e-2);
+    pointer-events: none;
+}
+
+.regiao {
+    display: flex;
+    flex-direction: column;
+    gap: var(--e-2);
+    width: 100%;
+    max-width: 24rem;
+}
+
+.regiao:empty {
+    display: none;
+}
+
+.aviso {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--e-2);
+    padding: 0 0 0 var(--e-3);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio-m);
+    background: var(--superficie);
+    box-shadow: var(--sombra-m);
+    pointer-events: auto;
+    animation: entrar var(--mov-painel) var(--curva);
+}
+
+.icone {
+    flex: none;
+    margin-top: var(--e-3);
+}
+
+.sucesso .icone {
+    color: var(--tom-sucesso);
+}
+
+.erro .icone {
+    color: var(--perigo);
+}
+
+.mensagem {
+    flex: 1;
+    min-width: 0;
+    padding: var(--e-3) 0;
+    font-size: var(--fs-p);
+}
+
+.fechar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--controle);
+    height: var(--controle);
+    padding: 0;
+    border: 0;
+    border-radius: var(--raio-p);
+    background: transparent;
+    color: var(--texto-suave);
+    cursor: pointer;
+}
+
+.fechar:hover {
+    background: var(--superficie-sutil);
+}
+
+@keyframes entrar {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}

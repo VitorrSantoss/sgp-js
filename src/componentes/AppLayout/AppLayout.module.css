@@ -1,0 +1,215 @@
+.layout {
+    min-height: 100dvh;
+}
+
+.pular {
+    position: fixed;
+    top: var(--e-2);
+    left: var(--e-2);
+    z-index: var(--z-modal);
+    padding: var(--e-2) var(--e-4);
+    border-radius: var(--raio-p);
+    background: var(--acao);
+    color: var(--sobre-acao);
+    font-weight: var(--peso-forte);
+    transform: translateY(-200%);
+}
+
+.pular:focus {
+    transform: none;
+}
+
+/* Barra do mobile: sempre clara, por causa do logo */
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-topo);
+    display: flex;
+    align-items: center;
+    gap: var(--e-2);
+    height: var(--topo);
+    padding: 0 var(--e-2);
+    border-bottom: 1px solid var(--borda);
+    background: var(--superficie);
+}
+
+.topo .logo img {
+    width: 7.5rem;
+}
+
+.menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: var(--controle);
+    height: var(--controle);
+    padding: 0;
+    border: 0;
+    border-radius: var(--raio-p);
+    background: transparent;
+    color: var(--texto-titulo);
+    cursor: pointer;
+}
+
+.menu:hover {
+    background: var(--superficie-sutil);
+}
+
+.fundo {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-lateral);
+    background: var(--overlay);
+    animation: surgir var(--mov-painel) var(--curva);
+}
+
+.lateral {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: var(--z-lateral);
+    display: flex;
+    flex-direction: column;
+    width: min(var(--lateral), 85vw);
+    padding: var(--e-3);
+    border-right: 1px solid var(--borda);
+    background: var(--superficie);
+    overflow-y: auto;
+    visibility: hidden;
+    transform: translateX(-100%);
+    transition:
+        transform var(--mov-painel) var(--curva),
+        visibility var(--mov-painel);
+}
+
+/* Sem transição de visibility ao abrir: o painel precisa aceitar foco na hora. */
+.aberta {
+    box-shadow: var(--sombra-g);
+    visibility: visible;
+    transform: none;
+    transition: transform var(--mov-painel) var(--curva);
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-2);
+    min-height: var(--controle);
+    padding: var(--e-1);
+    margin-bottom: var(--e-5);
+}
+
+.marca .logo img {
+    width: 10rem;
+}
+
+.navegacao {
+    flex: 1;
+}
+
+.navegacao ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: var(--e-3);
+    width: 100%;
+    min-height: var(--controle);
+    padding: 0 var(--e-3);
+    border: 0;
+    border-radius: var(--raio-p);
+    background: transparent;
+    color: var(--texto-suave);
+    font-size: var(--fs-p);
+    font-weight: var(--peso-medio);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background-color var(--mov-hover) var(--curva),
+        color var(--mov-hover) var(--curva);
+}
+
+.item:hover {
+    background: var(--superficie-sutil);
+    color: var(--texto-titulo);
+}
+
+.ativo,
+.ativo:hover {
+    background: var(--superficie-selecao);
+    color: var(--texto-titulo);
+    font-weight: var(--peso-forte);
+}
+
+.sair {
+    position: relative;
+    margin-top: var(--e-5);
+}
+
+.sair::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--e-3) * -1);
+    right: 0;
+    left: 0;
+    border-top: 1px solid var(--borda);
+}
+
+.coluna {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: calc(100dvh - var(--topo));
+}
+
+.conteudo {
+    flex: 1;
+    width: 100%;
+    max-width: var(--conteudo-max);
+    margin: 0 auto;
+    padding: var(--e-4);
+}
+
+@media (min-width: 48rem) {
+    .conteudo {
+        padding: var(--e-5);
+    }
+}
+
+@media (min-width: 64rem) {
+    .layout {
+        display: grid;
+        grid-template-columns: var(--lateral) minmax(0, 1fr);
+    }
+
+    .topo,
+    .fundo {
+        display: none;
+    }
+
+    .lateral {
+        position: sticky;
+        width: auto;
+        height: 100dvh;
+        visibility: visible;
+        transform: none;
+        transition: none;
+    }
+
+    .coluna {
+        min-height: 100dvh;
+    }
+}
+
+@keyframes surgir {
+    from {
+        opacity: 0;
+    }
+}

@@ -1,0 +1,124 @@
+/*
+ * Tokens do SGP. Componentes usam só os semânticos; os --marca-* ficam aqui.
+ * Um tema escuro futuro redefine este bloco, sem tocar nos componentes.
+ */
+:root {
+    /* Marca: hex amostrados dos PNGs do logo */
+    --marca-marinho: #003D60;
+    --marca-azul: #0061A9;
+    --marca-ambar: #FFA914;
+    --marca-laranja: #FF6A0C;
+
+    /* Superfícies */
+    --fundo: #F5F7F9;
+    --superficie: #FFFFFF;
+    --superficie-sutil: #EEF1F5;
+    --superficie-selecao: #E3F0FA;
+    --overlay: rgb(0 37 59 / 0.6);
+    --overlay-login: rgb(0 61 96 / 0.84);
+
+    /* Texto */
+    --texto-titulo: var(--marca-marinho);
+    --texto: #1E2F3D;
+    --texto-suave: #475569;
+    --texto-invertido: #FFFFFF;
+
+    /* Bordas */
+    --borda: #D5DDE4;
+    --borda-controle: #7C8B99;
+
+    /* Ações */
+    --acao: var(--marca-azul);
+    --acao-hover: #004F8A;
+    --acao-pressionada: var(--marca-marinho);
+    --sobre-acao: #FFFFFF;
+    --perigo: #B3261E;
+    --perigo-hover: #8F1E18;
+    --sobre-perigo: #FFFFFF;
+    --foco: var(--marca-azul);
+    --progresso: var(--marca-azul);
+
+    /* Tons de feedback: texto sobre fundo, todos acima de 4.5:1 */
+    --tom-info: #00497F;
+    --tom-info-fundo: #E3F0FA;
+    --tom-marinho: #003D60;
+    --tom-marinho-fundo: #DCE9F1;
+    --tom-ambar: #7A4A00;
+    --tom-ambar-fundo: #FFF1D6;
+    --tom-laranja: #9A3412;
+    --tom-laranja-fundo: #FFE8DC;
+    --tom-neutro: #475569;
+    --tom-neutro-fundo: #EEF1F5;
+    --tom-sucesso: #0B5F58;
+    --tom-sucesso-fundo: #DDF3F0;
+    --tom-perigo: #B3261E;
+    --tom-perigo-fundo: #FCE8E6;
+
+    /* Gráficos */
+    --grafico-pendente: var(--marca-ambar);
+    --grafico-fazendo: var(--marca-azul);
+    --grafico-finalizada: var(--marca-marinho);
+    --grafico-alta: var(--marca-laranja);
+    --grafico-media: var(--marca-ambar);
+    --grafico-baixa: #64748B;
+    --grafico-ativo: var(--marca-marinho);
+    --grafico-inativo: #8896A3;
+    --grafico-contorno: var(--marca-marinho);
+    --grafico-grade: #E4E9EE;
+    --grafico-texto: #475569;
+    --grafico-eixo: #7C8B99;
+    --grafico-tooltip: var(--marca-marinho);
+    --grafico-tooltip-texto: #FFFFFF;
+    --grafico-fatia-borda: #FFFFFF;
+
+    /* Espaçamento: grade 4/8px */
+    --e-1: 0.25rem;
+    --e-2: 0.5rem;
+    --e-3: 0.75rem;
+    --e-4: 1rem;
+    --e-5: 1.5rem;
+    --e-6: 2rem;
+    --e-7: 3rem;
+
+    /* Raios: 3 níveis */
+    --raio-p: 6px;
+    --raio-m: 10px;
+    --raio-g: 14px;
+
+    /* Sombras */
+    --sombra-p: 0 1px 2px rgb(0 37 59 / 0.05);
+    --sombra-m: 0 6px 16px rgb(0 37 59 / 0.1);
+    --sombra-g: 0 18px 44px rgb(0 37 59 / 0.2);
+
+    /* Tipografia */
+    --fonte: "Fira Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --fs-xs: 0.8125rem;
+    --fs-p: 0.875rem;
+    --fs-m: 1rem;
+    --fs-g: 1.25rem;
+    --fs-xg: 1.5rem;
+    --fs-kpi: 1.875rem;
+    --peso-medio: 500;
+    --peso-forte: 600;
+    --linha: 1.5;
+    --linha-titulo: 1.25;
+
+    /* Medidas */
+    --controle: 2.75rem;
+    --topo: 3.5rem;
+    --lateral: 15rem;
+    --conteudo-max: 88rem;
+    --formulario-max: 60rem;
+
+    /* Movimento */
+    --mov-hover: 150ms;
+    --mov-painel: 200ms;
+    --mov-clique: 90ms;
+    --curva: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    /* Camadas */
+    --z-topo: 20;
+    --z-lateral: 40;
+    --z-modal: 100;
+    --z-toast: 200;
+}

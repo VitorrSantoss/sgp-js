@@ -1,0 +1,37 @@
+.topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--e-3);
+    margin-bottom: var(--e-4);
+}
+
+.textos {
+    min-width: 0;
+}
+
+.titulo {
+    font-size: var(--fs-xg);
+}
+
+.descricao {
+    margin-top: 2px;
+    color: var(--texto-suave);
+    font-size: var(--fs-p);
+}
+
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e-1);
+    min-height: var(--controle);
+    color: var(--acao);
+    font-size: var(--fs-p);
+    font-weight: var(--peso-medio);
+    text-decoration: none;
+}
+
+.voltar:hover {
+    text-decoration: underline;
+}

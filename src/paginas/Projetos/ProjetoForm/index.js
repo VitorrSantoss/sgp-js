@@ -1,11 +1,36 @@
-import { useEffect, useState } from "react";
-import Cabecalho from "../../../componentes/Cabecalho";
-import Rodape from "../../../componentes/Rodape";
-import Modal from "../../../componentes/Modal";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { CheckSquare, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import Badge from "../../../componentes/Badge";
+import Botao from "../../../componentes/Botao";
+import BotaoIcone from "../../../componentes/BotaoIcone";
+import EmptyState from "../../../componentes/EmptyState";
+import Formulario from "../../../componentes/Formulario";
+import Input from "../../../componentes/Input";
+import Modal from "../../../componentes/Modal";
+import PaginaTopo from "../../../componentes/PaginaTopo";
+import TabelaDados from "../../../componentes/TabelaDados";
+import { useCarga, useLista } from "../../../hooks/useCarga";
+import { useExclusao } from "../../../hooks/useExclusao";
+import { exigir, useFormulario } from "../../../hooks/useFormulario";
 import { atualizarProjeto, obterProjetoPeloId, salvarProjeto } from "../../../servicos/projetos";
-import { listarUsuarios } from "../../../servicos/usuarios";
 import { excluirTarefaPeloId } from "../../../servicos/tarefas";
+import { listarUsuarios } from "../../../servicos/usuarios";
+import { PRIORIDADE, STATUS_TAREFA } from "../../../utils/rotulos";
+import estilos from "./ProjetoForm.module.css";
+
+const REGRAS = {
+    nome: exigir("Informe o nome do projeto."),
+    responsavel: exigir("Escolha o responsável."),
+    descricao: exigir("Descreva o projeto."),
+};
+
+const COLUNAS_TAREFAS = [
+    { id: "titulo", rotulo: "Título", valor: (t) => t.titulo, principal: true },
+    { id: "prioridade", rotulo: "Prioridade", valor: (t) => <Badge valor={t.prioridade} mapa={PRIORIDADE} /> },
+    { id: "status", rotulo: "Status", valor: (t) => <Badge valor={t.status} mapa={STATUS_TAREFA} /> },
+    { id: "usuario", rotulo: "Atribuído para", valor: (t) => t.usuario?.nome },
+];
 
 function ProjetoForm() {
     const navigate = useNavigate();
@@ -15,195 +40,139 @@ function ProjetoForm() {
     const [descricao, setDescricao] = useState("");
     const [responsavelId, setResponsavelId] = useState("");
     const [tarefas, setTarefas] = useState([]);
-    const [usuarios, setUsuarios] = useState([]);
-    const [tarefaParaExcluir, setTarefaParaExcluir] = useState({});
-    const [exibirModalSalvar, setExibirModalSalvar] = useState(false);
-    const [exibirModalExcluir, setExibirModalExcluir] = useState(false);
+    const usuarios = useLista(listarUsuarios);
 
-    useEffect(() => {
-        if (id) {
-            obterProjetoPeloId(id, setNome, setDescricao, setResponsavelId, setTarefas);
-        }
+    const carregar = useCallback((marcar) => obterProjetoPeloId(
+        id,
+        (valor) => { marcar(); setNome(valor ?? ""); },
+        (valor) => setDescricao(valor ?? ""),
+        (valor) => setResponsavelId(valor ?? ""),
+        (valor) => setTarefas(valor ?? [])
+    ), [id]);
 
-        listarUsuarios(setUsuarios);
-    }, []);
+    const carga = useCarga(carregar, Boolean(id));
+    const voltar = () => navigate("/projetos");
 
-    const enviarFormulario = async (e) => {
-        e.preventDefault();
+    const form = useFormulario({
+        regras: REGRAS,
+        valores: { nome, descricao, responsavel: responsavelId },
+        mensagem: `Projeto ${id ? "atualizado" : "cadastrado"} com sucesso!`,
+        aoConcluir: voltar,
+        salvar: async (sinalizar) => {
+            const dadosProjeto = {
+                nome,
+                descricao,
+                responsavel: {
+                    id: responsavelId
+                }
+            };
 
-        const dadosProjeto = {
-            nome,
-            descricao,
-            responsavel: {
-                id: responsavelId
+            console.log(dadosProjeto);
+
+            if (id) {
+                await atualizarProjeto(id, dadosProjeto, sinalizar);
+            } else {
+                await salvarProjeto(dadosProjeto, sinalizar);
             }
-        }
+        },
+    });
 
-        console.log(dadosProjeto);
+    const exclusao = useExclusao(
+        excluirTarefaPeloId,
+        (idTarefa) => setTarefas((lista) => lista.filter((t) => t.id !== idTarefa)),
+        "Tarefa excluída."
+    );
 
-        if (id) {
-            await atualizarProjeto(id, dadosProjeto, setExibirModalSalvar);
-        } else {
-            await salvarProjeto(dadosProjeto, setExibirModalSalvar);
-        }
-    }
-
-    const cancelar = () => {
-        navigate("/projetos");
-    }
-
-    const confirmarCadastro = () => {
-        setExibirModalSalvar(false);
-        navigate("/projetos");
-    }
-
-    const confirmarExclusao = (id) => {
-        setExibirModalExcluir(true);
-        setTarefaParaExcluir(id);
-    }
-
-    const cancelarExclusao = () => {
-        setExibirModalExcluir(false);
-        setTarefaParaExcluir({});
-    }
-
-    const excluirTarefa = async () => {
-        await excluirTarefaPeloId(tarefaParaExcluir, setExibirModalExcluir);
-
-        setTarefaParaExcluir({});
-        setTarefas(tarefas.filter(t => t.id !== tarefaParaExcluir));
-    }
+    const campoResponsavel = form.campo("responsavel");
 
     return (
         <>
-            <Cabecalho />
+            <PaginaTopo
+                titulo={id ? "Editar projeto" : "Novo projeto"}
+                voltar={{ para: "/projetos", rotulo: "Projetos" }}
+            />
 
-            <section className="container mt-3" id="projeto-form">
-                <h1>Dados do Projeto</h1>
+            <Formulario
+                estado={carga.estado}
+                aoRecarregar={carga.recarregar}
+                form={form}
+                textoSalvar="Salvar projeto"
+                aoCancelar={voltar}
+            >
+                <Input
+                    {...form.campo("nome")}
+                    rotulo="Nome"
+                    placeholder="Digite o nome do projeto"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                />
+                <Input
+                    {...campoResponsavel}
+                    rotulo="Responsável"
+                    as="select"
+                    value={responsavelId}
+                    onChange={(e) => setResponsavelId(e.target.value)}
+                    erro={campoResponsavel.erro
+                        || (usuarios.estado === "erro" ? "Não foi possível carregar os usuários." : "")}
+                >
+                    <option disabled value="">
+                        {usuarios.estado === "carregando" ? "Carregando..." : "Escolha um usuário..."}
+                    </option>
+                    {usuarios.itens.map((usuario) => (
+                        <option key={usuario.id} value={usuario.id}>{usuario.nome}</option>
+                    ))}
+                </Input>
+                <Input
+                    {...form.campo("descricao")}
+                    rotulo="Descrição"
+                    as="textarea"
+                    rows={5}
+                    larga
+                    value={descricao}
+                    onChange={(e) => setDescricao(e.target.value)}
+                />
+            </Formulario>
 
-                <form className="row g-3" onSubmit={enviarFormulario}>
-                    <div className="col-12">
-                        <label htmlFor="nome" className="form-label">Nome:</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="nome"
-                            placeholder="Digite o nome do projeto"
-                            value={nome}
-                            onChange={(e) => setNome(e.target.value)}
-                            required
+            <section className={estilos.tarefas} aria-labelledby="titulo-tarefas">
+                <div className={estilos.topo}>
+                    <h2 id="titulo-tarefas" className={estilos.titulo}>Tarefas associadas</h2>
+                    <Botao para="/nova-tarefa" cor="secondary" icone={Plus} texto="Nova tarefa" />
+                </div>
+
+                <TabelaDados
+                    rotulo="Tarefas associadas"
+                    colunas={COLUNAS_TAREFAS}
+                    itens={tarefas}
+                    estado={carga.estado}
+                    aoRecarregar={carga.recarregar}
+                    vazio={
+                        <EmptyState
+                            nivel="h3"
+                            icone={CheckSquare}
+                            titulo="Nenhuma tarefa associada"
+                            texto="As tarefas ligadas a este projeto aparecem aqui."
                         />
-                    </div>
-                    <div className="col-12">
-                        <label htmlFor="descricao" className="form-label">Descricao:</label>
-                        <textarea
-                            type="text"
-                            rows={5}
-                            className="form-control"
-                            id="descricao"
-                            value={descricao}
-                            onChange={(e) => setDescricao(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="col-12">
-                        <label htmlFor="responsavel" className="form-label">Responsavel:</label>
-                        <select
-                            id="responsavel"
-                            className="form-select"
-                            value={responsavelId}
-                            onChange={(e) => setResponsavelId(e.target.value)}
-                            required
-                        >
-                            <option disabled value="">Escolha um usuario...</option>
-                            {usuarios?.map((usuario) => (
-                                <option value={usuario.id} key={usuario.id}>
-                                    {usuario.nome}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="col-12">
-                        <button type="submit" className="btn btn-primary">Salvar</button>
-                        <button className="btn btn-outline-primary ms-2" onClick={cancelar}>Cancelar</button>
-                    </div>
-                </form>
-
-                <section className="container mt-3" id="tarefas">
-                    <div className="d-flex justify-content-between">
-                        <h2>Tarefas Associadas</h2>
-                        <div>
-                            <a role="button" href="/nova-tarefa" className="btn btn-primary">
-                                Nova Tarefa
-                            </a>
-                        </div>
-                    </div>
-
-                    <table className="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Titulo</th>
-                                <th scope="col">Prioridade</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Atribuido para</th>
-                                <th scope="col">Opcoes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tarefas?.map((tarefa) => (
-                                <tr key={tarefa.id}>
-                                    <th scope="row">{tarefa.id}</th>
-                                    <td>{tarefa.titulo}</td>
-                                    <td>{tarefa.prioridade}</td>
-                                    <td>{tarefa.status}</td>
-                                    <td>{tarefa.usuario?.nome}</td>
-                                    <td>
-                                        <div className="btn-group" role="group">
-                                            <button
-                                                type="button"
-                                                className="btn btn-primary"
-                                                onClick={() => navigate(`/tarefa/${tarefa.id}`)}
-                                            >
-                                                Editar
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="btn btn-danger"
-                                                onClick={() => confirmarExclusao(tarefa.id)}
-                                            >
-                                                Excluir
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </section>
-
-                {exibirModalSalvar && (
-                    <Modal
-                        titulo={"Confirmacao"}
-                        texto={`Projeto ${id ? 'atualizado' : 'cadastrado'} com sucesso!`}
-                        txtBtn01={"OK"}
-                        onClickBtn01={confirmarCadastro}
-                    />
-                )}
-
-                {exibirModalExcluir && (
-                    <Modal
-                        titulo={"Confirmacao de Exclusao"}
-                        texto={"Tem certeza que deseja excluir esta tarefa?"}
-                        txtBtn01={"Sim, excluir."}
-                        onClickBtn01={excluirTarefa}
-                        txtBtn02={"Cancelar"}
-                        onClickBtn02={cancelarExclusao}
-                    />
-                )}
+                    }
+                    acoes={(tarefa) => (
+                        <>
+                            <BotaoIcone icone={PencilSimple} rotulo={`Editar ${tarefa.titulo}`} para={`/tarefa/${tarefa.id}`} />
+                            <BotaoIcone icone={Trash} perigo rotulo={`Excluir ${tarefa.titulo}`} aoClicar={() => exclusao.pedir(tarefa)} />
+                        </>
+                    )}
+                />
             </section>
 
-            <Rodape />
+            {exclusao.alvo && (
+                <Modal
+                    destrutivo
+                    titulo="Confirmação de exclusão"
+                    texto={`Tem certeza que deseja excluir a tarefa ${exclusao.alvo.titulo}? Esta ação não pode ser desfeita.`}
+                    txtBtn01="Sim, excluir"
+                    onClickBtn01={exclusao.confirmar}
+                    txtBtn02="Cancelar"
+                    onClickBtn02={exclusao.cancelar}
+                />
+            )}
         </>
     );
 }

@@ -35,15 +35,17 @@ O Sistema de Gestão de Projetos é uma aplicação web moderna que permite o co
 ### 📈 Dashboard Analytics
 - Gráficos de barras para status das tarefas por projeto
 - Gráficos de barras horizontais para prioridades
-- Gráfico de pizza para status de usuários
+- Gráfico de rosca para status de usuários
 - Visualizações responsivas e interativas
 
 ## 🛠️ Tecnologias Utilizadas
 
 ### Frontend
-- **React** 18+ - Biblioteca principal
+- **React** 19 - Biblioteca principal
 - **React Router DOM** - Roteamento
-- **Bootstrap** 5 - Framework CSS
+- **CSS Modules + tokens** - Design próprio, sem framework de UI
+- **Phosphor Icons** - Ícones
+- **Fira Sans** (fontsource) - Tipografia
 - **Chart.js** + **React-Chartjs-2** - Gráficos interativos
 - **Axios** - Cliente HTTP
 
@@ -59,13 +61,23 @@ src/
 ├── arquivos/
 │   └── imagens/           # Assets e imagens
 ├── componentes/           # Componentes reutilizáveis
-│   ├── Alerta/           # Componente de alertas
-│   ├── Botao/            # Componente de botão customizado
-│   ├── Cabecalho/        # Header da aplicação
-│   ├── Modal/            # Componente de modal
-│   └── Rodape/           # Footer da aplicação
+│   ├── Alerta/           # Banner de aviso
+│   ├── AppLayout/        # Sidebar, drawer mobile e área de conteúdo
+│   ├── Badge/            # Status e prioridade com ícone e texto
+│   ├── Botao/            # Botão e link com aparência de botão
+│   ├── BotaoIcone/       # Ações de ícone com aria-label
+│   ├── EmptyState/       # Estados vazio, de erro e 404
+│   ├── Formulario/       # Moldura dos formulários
+│   ├── Input/            # Campo com label e erro
+│   ├── Modal/            # Diálogo acessível
+│   ├── PaginaTopo/       # Título e ação primária da página
+│   ├── Rodape/           # Footer da aplicação
+│   ├── Skeleton/         # Carregamento
+│   ├── TabelaDados/      # Tabela que vira cards e barra de filtros
+│   └── Toast/            # Avisos de sucesso e erro
 ├── contextos/            # Context API
 │   └── GlobalContext.js  # Estado global da aplicação
+├── hooks/                # Carga, exclusão, formulário e foco preso
 ├── mocks/                # Dados mockados
 │   ├── projetos.js
 │   ├── tarefas.js
@@ -78,13 +90,17 @@ src/
 │   ├── Tarefas/          # CRUD de tarefas
 │   └── Usuarios/         # CRUD de usuários
 ├── rotas/                # Configuração de rotas
+├── styles/               # tokens.css e global.css
 ├── servicos/             # Serviços de API
 │   ├── api.js           # Configuração do Axios
 │   ├── projetos.js      # Endpoints de projetos
 │   ├── tarefas.js       # Endpoints de tarefas
 │   └── usuarios.js      # Endpoints de usuários
 └── utils/                # Utilitários
-    └── data.js           # Funções de formatação
+    ├── data.js           # Funções de formatação
+    ├── grafico.js        # Tokens e opções do Chart.js
+    ├── rotulos.js        # Rótulos e ícones dos valores da API
+    └── texto.js          # Busca sem acento
 ```
 
 ## 🚀 Como Executar
@@ -156,15 +172,18 @@ O dashboard oferece visualizações avançadas dos dados:
 
 - **Status das Tarefas por Projeto**: Gráfico de barras verticais mostrando a distribuição de tarefas (Pendente, Fazendo, Finalizada) para cada projeto
 - **Prioridade das Tarefas por Projeto**: Gráfico de barras horizontais exibindo a distribuição de prioridades (Alta, Média, Baixa) por projeto
-- **Status dos Usuários**: Gráfico de pizza mostrando a proporção de usuários ativos e inativos
+- **Status dos Usuários**: Gráfico de rosca mostrando a proporção de usuários ativos e inativos
+- **Indicadores**: Total de usuários, projetos e tarefas e percentual de tarefas finalizadas
 
 ## 🎨 Interface e UX
 
 - **Design Responsivo**: Compatível com desktop, tablet e mobile
-- **Bootstrap 5**: Interface moderna e consistente
-- **Modais de Confirmação**: Ações críticas requerem confirmação
+- **Design system próprio**: Tokens em `src/styles/tokens.css` e decisões em `design-system/sgp/`
+- **Paleta do logo**: Cores de marca amostradas dos arquivos do logo; âmbar e laranja nunca como texto
+- **Acessibilidade**: Foco visível, navegação por teclado, contraste AA e `prefers-reduced-motion`
+- **Modais de Confirmação**: Ações críticas requerem confirmação, com foco preso e Esc
 - **Navegação Intuitiva**: Menu principal com acesso rápido a todas as funcionalidades
-- **Feedback Visual**: Alertas e mensagens informativas
+- **Feedback Visual**: Toasts e estados de carregando, vazio e erro com tentar novamente
 
 ## 🔒 Segurança
 

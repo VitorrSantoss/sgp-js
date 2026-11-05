@@ -1,5 +1,5 @@
 /*
- * Tokens do SGP. Componentes usam só os semânticos; os --marca-* ficam aqui.
+ * Tokens do SGP, direção editorial. Componentes usam só os semânticos.
  * Um tema escuro futuro redefine este bloco, sem tocar nos componentes.
  */
 :root {
@@ -9,50 +9,50 @@
     --marca-ambar: #FFA914;
     --marca-laranja: #FF6A0C;
 
-    /* Superfícies */
-    --fundo: #F5F7F9;
+    /* Superfícies: papel quente, sem cartões */
+    --fundo: #FBFAF6;
     --superficie: #FFFFFF;
-    --superficie-sutil: #EEF1F5;
-    --superficie-selecao: #E3F0FA;
-    --overlay: rgb(0 37 59 / 0.6);
+    --superficie-sutil: #F1EEE6;
+    --superficie-marca: var(--marca-marinho);
+    --overlay: rgb(0 37 59 / 0.55);
     --overlay-login: rgb(0 61 96 / 0.84);
 
-    /* Texto */
+    /* Tinta */
     --texto-titulo: var(--marca-marinho);
-    --texto: #1E2F3D;
-    --texto-suave: #475569;
+    --texto: #1E2A33;
+    --texto-suave: #56564E;
     --texto-invertido: #FFFFFF;
+    --destaque-invertido: var(--marca-ambar);
 
-    /* Bordas */
-    --borda: #D5DDE4;
-    --borda-controle: #7C8B99;
+    /* Filetes */
+    --filete: #DAD5C9;
+    --filete-forte: var(--marca-marinho);
+    --borda-controle: #7D7A70;
+    --marca-ativa: var(--marca-laranja);
 
     /* Ações */
-    --acao: var(--marca-azul);
-    --acao-hover: #004F8A;
-    --acao-pressionada: var(--marca-marinho);
+    --acao: var(--marca-marinho);
+    --acao-hover: #002A42;
     --sobre-acao: #FFFFFF;
+    --link: var(--marca-azul);
     --perigo: #B3261E;
     --perigo-hover: #8F1E18;
     --sobre-perigo: #FFFFFF;
     --foco: var(--marca-azul);
-    --progresso: var(--marca-azul);
+    --progresso: var(--marca-marinho);
 
-    /* Tons de feedback: texto sobre fundo, todos acima de 4.5:1 */
+    /* Tons: texto sobre o papel, todos acima de 4.5:1 */
     --tom-info: #00497F;
-    --tom-info-fundo: #E3F0FA;
+    --tom-info-fundo: #E6EFF5;
     --tom-marinho: #003D60;
-    --tom-marinho-fundo: #DCE9F1;
     --tom-ambar: #7A4A00;
-    --tom-ambar-fundo: #FFF1D6;
+    --tom-ambar-fundo: #FBEFD8;
     --tom-laranja: #9A3412;
-    --tom-laranja-fundo: #FFE8DC;
-    --tom-neutro: #475569;
-    --tom-neutro-fundo: #EEF1F5;
+    --tom-neutro: #56564E;
     --tom-sucesso: #0B5F58;
     --tom-sucesso-fundo: #DDF3F0;
     --tom-perigo: #B3261E;
-    --tom-perigo-fundo: #FCE8E6;
+    --tom-perigo-fundo: #FBE9E6;
 
     /* Gráficos */
     --grafico-pendente: var(--marca-ambar);
@@ -60,16 +60,16 @@
     --grafico-finalizada: var(--marca-marinho);
     --grafico-alta: var(--marca-laranja);
     --grafico-media: var(--marca-ambar);
-    --grafico-baixa: #64748B;
+    --grafico-baixa: #6F6E64;
     --grafico-ativo: var(--marca-marinho);
-    --grafico-inativo: #8896A3;
+    --grafico-inativo: #A3A094;
     --grafico-contorno: var(--marca-marinho);
-    --grafico-grade: #E4E9EE;
-    --grafico-texto: #475569;
-    --grafico-eixo: #7C8B99;
+    --grafico-grade: #E6E1D6;
+    --grafico-texto: #56564E;
+    --grafico-eixo: var(--marca-marinho);
     --grafico-tooltip: var(--marca-marinho);
     --grafico-tooltip-texto: #FFFFFF;
-    --grafico-fatia-borda: #FFFFFF;
+    --grafico-fatia-borda: #FBFAF6;
 
     /* Espaçamento: grade 4/8px */
     --e-1: 0.25rem;
@@ -79,36 +79,39 @@
     --e-5: 1.5rem;
     --e-6: 2rem;
     --e-7: 3rem;
+    --e-8: 4rem;
 
-    /* Raios: 3 níveis */
-    --raio-p: 6px;
-    --raio-m: 10px;
-    --raio-g: 14px;
+    /* Raios: 3 níveis, retos (Taste-Skill: sharp) */
+    --raio-p: 2px;
+    --raio-m: 4px;
+    --raio-g: 8px;
 
-    /* Sombras */
-    --sombra-p: 0 1px 2px rgb(0 37 59 / 0.05);
-    --sombra-m: 0 6px 16px rgb(0 37 59 / 0.1);
-    --sombra-g: 0 18px 44px rgb(0 37 59 / 0.2);
+    /* Sombras: só no que flutua */
+    --sombra-m: 0 6px 18px rgb(0 37 59 / 0.14);
+    --sombra-g: 0 18px 44px rgb(0 37 59 / 0.22);
 
     /* Tipografia */
-    --fonte: "Fira Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --fonte: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --fonte-titulo: "Newsreader", Georgia, "Times New Roman", serif;
+    --fonte-dados: "DM Mono", ui-monospace, Consolas, monospace;
+    --fs-xxs: 0.75rem;
     --fs-xs: 0.8125rem;
-    --fs-p: 0.875rem;
+    --fs-p: 0.9375rem;
     --fs-m: 1rem;
-    --fs-g: 1.25rem;
-    --fs-xg: 1.5rem;
-    --fs-kpi: 1.875rem;
+    --fs-g: 1.375rem;
+    --fs-xg: 1.75rem;
+    --fs-titulo: clamp(2.25rem, 1.8rem + 2vw, 3.25rem);
+    --fs-kpi: clamp(2.5rem, 2rem + 2vw, 3.5rem);
     --peso-medio: 500;
     --peso-forte: 600;
-    --linha: 1.5;
-    --linha-titulo: 1.25;
+    --linha: 1.55;
+    --linha-titulo: 1.12;
 
     /* Medidas */
     --controle: 2.75rem;
-    --topo: 3.5rem;
-    --lateral: 15rem;
-    --conteudo-max: 88rem;
-    --formulario-max: 60rem;
+    --topo: 4.75rem;
+    --conteudo-max: 78rem;
+    --formulario-max: 50rem;
 
     /* Movimento */
     --mov-hover: 150ms;
@@ -117,8 +120,7 @@
     --curva: cubic-bezier(0.2, 0.8, 0.2, 1);
 
     /* Camadas */
-    --z-topo: 20;
-    --z-lateral: 40;
+    --z-topo: 40;
     --z-modal: 100;
     --z-toast: 200;
 }

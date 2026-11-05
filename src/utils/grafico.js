@@ -56,7 +56,7 @@ export function tooltip() {
         titleFont: { ...fonte(), weight: "600" },
         bodyFont: fonte(),
         padding: 12,
-        cornerRadius: 6,
+        cornerRadius: 2,
         boxPadding: 4,
     };
 }

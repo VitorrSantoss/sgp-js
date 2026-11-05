@@ -13,10 +13,11 @@
 
 .painel {
     width: 100%;
-    max-width: 28rem;
-    padding: var(--e-5);
-    border-radius: var(--raio-g);
-    background: var(--superficie);
+    max-width: 30rem;
+    padding: var(--e-6);
+    border-top: 3px solid var(--filete-forte);
+    border-radius: var(--raio-m);
+    background: var(--fundo);
     box-shadow: var(--sombra-g);
     animation: subir var(--mov-painel) var(--curva);
 }
@@ -29,7 +30,7 @@
 }
 
 .titulo {
-    font-size: var(--fs-g);
+    font-size: var(--fs-xg);
 }
 
 .texto {
@@ -41,7 +42,7 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: var(--e-2);
-    margin-top: var(--e-5);
+    margin-top: var(--e-6);
 }
 
 @keyframes surgir {

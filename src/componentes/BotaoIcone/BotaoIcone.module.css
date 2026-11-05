@@ -9,7 +9,7 @@
     border: 0;
     border-radius: var(--raio-p);
     background: transparent;
-    color: var(--acao);
+    color: var(--texto-titulo);
     cursor: pointer;
     transition:
         background-color var(--mov-hover) var(--curva),
@@ -17,7 +17,7 @@
 }
 
 .botao:hover {
-    background: var(--tom-info-fundo);
+    background: var(--superficie-sutil);
 }
 
 .botao:active {

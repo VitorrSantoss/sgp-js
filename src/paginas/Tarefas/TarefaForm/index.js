@@ -8,7 +8,6 @@ import { exigir, useFormulario } from "../../../hooks/useFormulario";
 import { listarProjetos } from "../../../servicos/projetos";
 import { atualizarTarefa, obterTarefaPeloId, salvarTarefa } from "../../../servicos/tarefas";
 import { listarUsuarios } from "../../../servicos/usuarios";
-import { formatarData } from "../../../utils/data";
 import { PRIORIDADE, STATUS_TAREFA, opcoesDe } from "../../../utils/rotulos";
 
 const REGRAS = {
@@ -64,8 +63,8 @@ function TarefaForm() {
         salvar: async (sinalizar) => {
             const dadosTarefa = {
                 titulo,
-                dataCriacao: formatarData(dataCriacao),
-                dataConclusao: formatarData(dataConclusao),
+                dataCriacao,
+                dataConclusao: dataConclusao || null,
                 prioridade,
                 status,
                 projeto: {

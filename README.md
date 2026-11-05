@@ -45,7 +45,7 @@ O Sistema de Gestão de Projetos é uma aplicação web moderna que permite o co
 - **React Router DOM** - Roteamento
 - **CSS Modules + tokens** - Design próprio, sem framework de UI
 - **Phosphor Icons** - Ícones
-- **Fira Sans** (fontsource) - Tipografia
+- **Newsreader, Instrument Sans e DM Mono** (fontsource) - Títulos, texto e dados
 - **Chart.js** + **React-Chartjs-2** - Gráficos interativos
 - **Axios** - Cliente HTTP
 
@@ -62,7 +62,7 @@ src/
 │   └── imagens/           # Assets e imagens
 ├── componentes/           # Componentes reutilizáveis
 │   ├── Alerta/           # Banner de aviso
-│   ├── AppLayout/        # Sidebar, drawer mobile e área de conteúdo
+│   ├── AppLayout/        # Navegação no topo, drawer mobile e área de conteúdo
 │   ├── Badge/            # Status e prioridade com ícone e texto
 │   ├── Botao/            # Botão e link com aparência de botão
 │   ├── BotaoIcone/       # Ações de ícone com aria-label

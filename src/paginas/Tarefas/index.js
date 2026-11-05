@@ -12,14 +12,15 @@ import BarraFiltros from "../../componentes/TabelaDados/BarraFiltros";
 import { useLista } from "../../hooks/useCarga";
 import { useExclusao } from "../../hooks/useExclusao";
 import { excluirTarefaPeloId, listarTarefas } from "../../servicos/tarefas";
+import { formatarData } from "../../utils/data";
 import { PRIORIDADE, STATUS_TAREFA, opcoesDe } from "../../utils/rotulos";
 import { casaBusca } from "../../utils/texto";
 
 // O projeto é a segunda linha do título: sete colunas não cabem em 1024px.
 const COLUNAS = [
     { id: "titulo", rotulo: "Título e projeto", valor: (t) => t.titulo, apoio: (t) => t.projeto?.nome, principal: true },
-    { id: "criacao", rotulo: "Criação", valor: (t) => <span className="num">{t.dataCriacao}</span> },
-    { id: "conclusao", rotulo: "Conclusão", valor: (t) => t.dataConclusao && <span className="num">{t.dataConclusao}</span> },
+    { id: "criacao", rotulo: "Criação", valor: (t) => <span className="num">{formatarData(t.dataCriacao)}</span> },
+    { id: "conclusao", rotulo: "Conclusão", valor: (t) => t.dataConclusao && <span className="num">{formatarData(t.dataConclusao)}</span> },
     { id: "prioridade", rotulo: "Prioridade", valor: (t) => <Badge valor={t.prioridade} mapa={PRIORIDADE} /> },
     { id: "status", rotulo: "Status", valor: (t) => <Badge valor={t.status} mapa={STATUS_TAREFA} /> },
 ];

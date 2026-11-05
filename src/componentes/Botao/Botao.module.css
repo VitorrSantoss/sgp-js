@@ -4,18 +4,18 @@
     justify-content: center;
     gap: var(--e-2);
     min-height: var(--controle);
-    padding: 0 var(--e-4);
+    padding: 0 var(--e-5);
     border: 1px solid transparent;
     border-radius: var(--raio-p);
     font-size: var(--fs-p);
-    font-weight: var(--peso-forte);
+    font-weight: var(--peso-medio);
     line-height: 1.2;
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
     transition:
         background-color var(--mov-hover) var(--curva),
-        border-color var(--mov-hover) var(--curva),
+        color var(--mov-hover) var(--curva),
         transform var(--mov-clique) var(--curva);
 }
 
@@ -29,7 +29,7 @@
 }
 
 .sm {
-    padding: 0 var(--e-3);
+    padding: 0 var(--e-2);
 }
 
 .lg {
@@ -46,18 +46,15 @@
     background: var(--acao-hover);
 }
 
-.primary:active:not(:disabled) {
-    background: var(--acao-pressionada);
-}
-
 .secondary {
-    border-color: var(--borda-controle);
-    background: var(--superficie);
+    border-color: var(--filete-forte);
+    background: transparent;
     color: var(--texto-titulo);
 }
 
 .secondary:hover:not(:disabled) {
-    background: var(--superficie-sutil);
+    background: var(--acao);
+    color: var(--sobre-acao);
 }
 
 .danger {
@@ -71,11 +68,13 @@
 
 .ghost {
     background: transparent;
-    color: var(--acao);
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 .ghost:hover:not(:disabled) {
-    background: var(--tom-info-fundo);
+    color: var(--texto-titulo);
 }
 
 .giro {

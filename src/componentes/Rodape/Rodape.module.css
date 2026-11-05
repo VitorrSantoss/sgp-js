@@ -1,13 +1,22 @@
 .rodape {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: var(--e-2);
-    padding: var(--e-3) var(--e-4);
+    width: 100%;
+    max-width: var(--conteudo-max);
+    margin: 0 auto;
+    padding: var(--e-4);
     color: var(--texto-suave);
     font-size: var(--fs-xs);
 }
 
 .rodape img {
     width: 1.125rem;
+}
+
+@media (min-width: 48rem) {
+    .rodape {
+        padding-right: var(--e-6);
+        padding-left: var(--e-6);
+    }
 }

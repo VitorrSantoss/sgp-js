@@ -1,26 +1,20 @@
-.quadro,
-.moldura {
-    border: 1px solid var(--borda);
-    border-radius: var(--raio-m);
-    background: var(--superficie);
-    box-shadow: var(--sombra-p);
+.quadro {
+    border-top: 1px solid var(--filete-forte);
+    border-bottom: 1px solid var(--filete);
 }
 
 .esqueleto {
     display: flex;
     flex-direction: column;
     gap: var(--e-3);
-    padding: var(--e-4);
+    padding: var(--e-4) 0;
 }
 
 .container {
     container-type: inline-size;
 }
 
-.moldura {
-    overflow: hidden;
-}
-
+/* Tabela sem caixa: só filetes, alinhada às margens do título */
 .tabela {
     width: 100%;
     border-collapse: collapse;
@@ -29,45 +23,60 @@
 
 .tabela th,
 .tabela td {
-    padding: var(--e-2) var(--e-3);
-    border-bottom: 1px solid var(--borda);
+    padding: var(--e-3) var(--e-2);
+    border-bottom: 1px solid var(--filete);
     font-weight: inherit;
     text-align: left;
     vertical-align: middle;
     overflow-wrap: anywhere;
 }
 
+.tabela th:first-child {
+    padding-left: 0;
+}
+
+.tabela th:last-child,
+.tabela td:last-child {
+    padding-right: 0;
+}
+
 .tabela thead th {
-    background: var(--superficie-sutil);
+    padding-top: 0;
+    border-bottom: 1px solid var(--filete-forte);
     color: var(--texto-suave);
-    font-size: var(--fs-xs);
+    font-size: var(--fs-xxs);
     font-weight: var(--peso-forte);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     white-space: nowrap;
 }
 
-.tabela tbody tr:last-child th,
-.tabela tbody tr:last-child td {
-    border-bottom: 0;
+.tabela tbody th,
+.tabela tbody td {
+    transition: border-color var(--mov-hover) var(--curva);
 }
 
-.tabela tbody tr {
-    transition: background-color var(--mov-hover) var(--curva);
-}
-
-.tabela tbody tr:hover {
-    background: var(--fundo);
+.tabela tbody tr:hover th,
+.tabela tbody tr:hover td {
+    border-bottom-color: var(--filete-forte);
 }
 
 .tabela tbody .principal {
     color: var(--texto-titulo);
+    font-family: var(--fonte-titulo);
+    font-size: 1.125rem;
     font-weight: var(--peso-medio);
+    line-height: 1.25;
 }
 
 .apoio {
     display: block;
+    margin-top: 2px;
     color: var(--texto-suave);
+    font-family: var(--fonte);
     font-size: var(--fs-xs);
     font-weight: 400;
+    line-height: 1.4;
 }
 
 .acoes {
@@ -80,13 +89,10 @@
     gap: var(--e-1);
 }
 
-/* Lista de cards */
+/* Lista corrida: cada registro separado por filete, sem cartão */
 @container (max-width: 44.99rem) {
     .moldura {
-        border: 0;
-        background: transparent;
-        box-shadow: none;
-        overflow: visible;
+        border-top: 1px solid var(--filete-forte);
     }
 
     .tabela {
@@ -102,20 +108,15 @@
     }
 
     .tabela tbody {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr));
-        gap: var(--e-3);
+        display: block;
     }
 
     .tabela tbody tr {
         display: flex;
         flex-direction: column;
         gap: var(--e-1);
-        padding: var(--e-3);
-        border: 1px solid var(--borda);
-        border-radius: var(--raio-m);
-        background: var(--superficie);
-        box-shadow: var(--sombra-p);
+        padding: var(--e-4) 0 var(--e-2);
+        border-bottom: 1px solid var(--filete);
     }
 
     .tabela tbody th,
@@ -142,14 +143,11 @@
     .tabela tbody .principal {
         display: block;
         margin-bottom: var(--e-1);
-        font-size: var(--fs-m);
+        font-size: var(--fs-g);
     }
 
     .tabela tbody .acoes {
         display: block;
         width: auto;
-        margin-top: var(--e-1);
-        padding-top: var(--e-1);
-        border-top: 1px solid var(--borda);
     }
 }

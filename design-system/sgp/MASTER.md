@@ -2,7 +2,8 @@
 > paleta teal REJEITADA (a cor de marca vem do logo: #003D60, #0061A9, #FFA914, #FF6A0C);
 > pattern "Product Demo" REJEITADO (é de landing page; o SGP é app interno);
 > Fira Code em títulos REJEITADA; GSAP/Scroll Reveal REJEITADO (dependência não autorizada).
-> Aceitos: estilo Minimalism & Swiss, Fira Sans, checklist web.
+> Direção atual (branch redesign/editorial): estilo Editorial Grid, com Newsreader (UI/UX Pro Max), Instrument Sans + DM Mono (sorteio do Taste-Skill) e navegação no topo; substitui Minimalism & Swiss e Fira Sans.
+> Aceito da saída crua: checklist web.
 > Regra adicional: nenhum texto sobre laranja (marinho sobre laranja dá 3,99:1).
 
 # Design System Master File

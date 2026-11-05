@@ -38,8 +38,7 @@ function serie(rotulo, data, backgroundColor) {
         backgroundColor,
         borderColor: token("--grafico-contorno"),
         borderWidth: 1,
-        borderRadius: 3,
-        maxBarThickness: 32,
+        maxBarThickness: 28,
     };
 }
 

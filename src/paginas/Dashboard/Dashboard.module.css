@@ -1,23 +1,18 @@
-/* Uma faixa só, dividida por linhas: quatro cards soltos seria o template de sempre. */
+/* Números grandes em colunas, com filete de jornal por cima: sem cartões. */
 .faixa {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1px;
-    margin-bottom: var(--e-3);
-    border: 1px solid var(--borda);
-    border-radius: var(--raio-m);
-    background: var(--borda);
-    box-shadow: var(--sombra-p);
-    overflow: hidden;
+    gap: var(--e-5) var(--e-4);
+    margin-bottom: var(--e-7);
 }
 
 .faixaEspera {
-    margin-bottom: var(--e-3);
+    margin-bottom: var(--e-7);
 }
 
 .kpi {
-    padding: var(--e-3) var(--e-4);
-    background: var(--superficie);
+    padding-top: var(--e-3);
+    border-top: 1px solid var(--filete-forte);
 }
 
 .kpi dt {
@@ -26,23 +21,27 @@
     font-weight: var(--peso-medio);
 }
 
-.kpiValor {
+.faixa .kpiValor {
+    margin-top: var(--e-1);
     color: var(--texto-titulo);
+    font-family: var(--fonte-titulo);
     font-size: var(--fs-kpi);
-    font-weight: var(--peso-forte);
-    line-height: 1.2;
+    font-weight: 400;
+    font-variant-numeric: lining-nums tabular-nums;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
 }
 
 .kpiDetalhe {
+    margin-top: var(--e-1);
     color: var(--texto-suave);
     font-size: var(--fs-xs);
 }
 
 .trilho {
-    height: 4px;
+    height: 3px;
     margin-top: var(--e-2);
-    border-radius: 2px;
-    background: var(--superficie-sutil);
+    background: var(--filete);
     overflow: hidden;
 }
 
@@ -55,26 +54,23 @@
 .grade {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--e-3);
+    gap: var(--e-7) var(--e-6);
 }
 
 .cartao {
     min-width: 0;
-    padding: var(--e-4);
-    border: 1px solid var(--borda);
-    border-radius: var(--raio-m);
-    background: var(--superficie);
-    box-shadow: var(--sombra-p);
+    padding-top: var(--e-3);
+    border-top: 1px solid var(--filete-forte);
 }
 
 .cartaoTitulo {
-    margin-bottom: var(--e-3);
-    font-size: var(--fs-m);
+    margin-bottom: var(--e-5);
+    font-size: var(--fs-xg);
 }
 
 .area {
     position: relative;
-    height: 20rem;
+    height: 21rem;
 }
 
 .areaHorizontal {
@@ -86,12 +82,12 @@
 .rosca {
     display: flex;
     flex-direction: column;
-    gap: var(--e-4);
+    gap: var(--e-5);
 }
 
 .areaRosca {
     position: relative;
-    height: 12rem;
+    height: 13rem;
 }
 
 .total {
@@ -108,15 +104,14 @@
 
 .total strong {
     color: var(--texto-titulo);
-    font-size: var(--fs-xg);
-    font-weight: var(--peso-forte);
-    line-height: 1.2;
+    font-family: var(--fonte-titulo);
+    font-size: 2.25rem;
+    font-weight: 400;
+    font-variant-numeric: lining-nums;
+    line-height: 1.1;
 }
 
 .legenda {
-    display: flex;
-    flex-direction: column;
-    gap: var(--e-2);
     font-size: var(--fs-p);
 }
 
@@ -124,19 +119,20 @@
     display: flex;
     align-items: center;
     gap: var(--e-2);
+    padding: var(--e-2) 0;
+    border-top: 1px solid var(--filete);
 }
 
 .legenda strong {
     margin-left: auto;
     color: var(--texto-titulo);
-    font-weight: var(--peso-forte);
+    font-weight: 400;
 }
 
 .amostra {
     flex: none;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 3px;
+    width: 0.875rem;
+    height: 0.875rem;
 }
 
 .corAtivo {
@@ -150,26 +146,26 @@
 @media (min-width: 48rem) {
     .faixa {
         grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: var(--e-6);
     }
 
     .rosca {
         flex-direction: row;
         align-items: center;
-        justify-content: center;
         gap: var(--e-7);
     }
 
     .areaRosca {
         flex: none;
-        width: 12rem;
+        width: 13rem;
     }
 
     .legenda {
-        min-width: 10rem;
+        flex: 1;
     }
 }
 
-@media (min-width: 72rem) {
+@media (min-width: 64rem) {
     .grade {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -185,7 +181,7 @@
     .rosca {
         flex-direction: column;
         align-items: stretch;
-        gap: var(--e-4);
+        gap: var(--e-5);
     }
 
     .areaRosca {

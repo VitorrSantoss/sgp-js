@@ -1,7 +1,6 @@
 .tela {
     display: grid;
     min-height: 100dvh;
-    background: var(--superficie);
 }
 
 .lado {
@@ -13,24 +12,23 @@
 
 .caixa {
     width: 100%;
-    max-width: 22rem;
+    max-width: 23rem;
 }
 
 .logo {
-    width: 11rem;
-    margin: 0 auto var(--e-2);
+    width: 10rem;
+    margin: 0 0 var(--e-5) calc(var(--e-5) * -1);
 }
 
 .titulo {
-    margin-bottom: var(--e-5);
-    font-size: var(--fs-g);
-    text-align: center;
+    margin-bottom: var(--e-6);
+    font-size: var(--fs-titulo);
 }
 
 .campos {
     display: flex;
     flex-direction: column;
-    gap: var(--e-4);
+    gap: var(--e-5);
 }
 
 .manter {
@@ -72,23 +70,25 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    gap: var(--e-2);
+    gap: var(--e-4);
     height: 100%;
-    max-width: 34rem;
-    padding: var(--e-7);
+    max-width: 44rem;
+    padding: var(--e-8);
     color: var(--texto-invertido);
 }
 
 .chamada {
-    font-size: 2rem;
-    font-weight: var(--peso-forte);
-    line-height: var(--linha-titulo);
+    font-family: var(--fonte-titulo);
+    font-size: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
     text-wrap: balance;
 }
 
 @media (min-width: 56rem) {
     .tela {
-        grid-template-columns: minmax(26rem, 2fr) 3fr;
+        grid-template-columns: minmax(28rem, 2fr) 3fr;
     }
 
     .painel {

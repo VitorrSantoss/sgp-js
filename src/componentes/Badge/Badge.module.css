@@ -1,9 +1,8 @@
+/* Sem pílula: ícone e texto na cor do estado, como uma marcação na margem. */
 .badge {
     display: inline-flex;
     align-items: center;
     gap: var(--e-1);
-    padding: 2px var(--e-2);
-    border-radius: var(--raio-p);
     font-size: var(--fs-xs);
     font-weight: var(--peso-medio);
     white-space: nowrap;
@@ -14,26 +13,21 @@
 }
 
 .ambar {
-    background: var(--tom-ambar-fundo);
     color: var(--tom-ambar);
 }
 
 .info {
-    background: var(--tom-info-fundo);
     color: var(--tom-info);
 }
 
 .marinho {
-    background: var(--tom-marinho-fundo);
     color: var(--tom-marinho);
 }
 
 .laranja {
-    background: var(--tom-laranja-fundo);
     color: var(--tom-laranja);
 }
 
 .neutro {
-    background: var(--tom-neutro-fundo);
     color: var(--tom-neutro);
 }

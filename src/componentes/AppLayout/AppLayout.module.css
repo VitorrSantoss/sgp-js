@@ -1,4 +1,6 @@
 .layout {
+    display: flex;
+    flex-direction: column;
     min-height: 100dvh;
 }
 
@@ -11,7 +13,7 @@
     border-radius: var(--raio-p);
     background: var(--acao);
     color: var(--sobre-acao);
-    font-weight: var(--peso-forte);
+    font-weight: var(--peso-medio);
     transform: translateY(-200%);
 }
 
@@ -19,25 +21,36 @@
     transform: none;
 }
 
-/* Barra do mobile: sempre clara, por causa do logo */
+/* Cabeçalho de publicação: sempre claro, por causa do logo */
 .topo {
     position: sticky;
     top: 0;
     z-index: var(--z-topo);
+    border-bottom: 1px solid var(--filete-forte);
+    background: var(--fundo);
+}
+
+.faixa {
     display: flex;
     align-items: center;
-    gap: var(--e-2);
+    justify-content: space-between;
+    gap: var(--e-5);
+    width: 100%;
+    max-width: var(--conteudo-max);
     height: var(--topo);
-    padding: 0 var(--e-2);
-    border-bottom: 1px solid var(--borda);
-    background: var(--superficie);
+    margin: 0 auto;
+    padding: 0 var(--e-4);
 }
 
-.topo .logo img {
-    width: 7.5rem;
+.logo {
+    flex: none;
 }
 
-.menu {
+.logo img {
+    width: 9.5rem;
+}
+
+.abrir {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -52,121 +65,90 @@
     cursor: pointer;
 }
 
-.menu:hover {
+.abrir:hover {
     background: var(--superficie-sutil);
 }
 
 .fundo {
     position: fixed;
     inset: 0;
-    z-index: var(--z-lateral);
     background: var(--overlay);
     animation: surgir var(--mov-painel) var(--curva);
 }
 
-.lateral {
+/* Abaixo de 768px o menu é um drawer vindo da direita */
+.menu {
     position: fixed;
     top: 0;
+    right: 0;
     bottom: 0;
-    left: 0;
-    z-index: var(--z-lateral);
     display: flex;
     flex-direction: column;
-    width: min(var(--lateral), 85vw);
-    padding: var(--e-3);
-    border-right: 1px solid var(--borda);
-    background: var(--superficie);
+    gap: var(--e-3);
+    width: min(19rem, 85vw);
+    padding: var(--e-3) var(--e-4);
+    border-left: 1px solid var(--filete-forte);
+    background: var(--fundo);
     overflow-y: auto;
     visibility: hidden;
-    transform: translateX(-100%);
+    transform: translateX(100%);
     transition:
         transform var(--mov-painel) var(--curva),
         visibility var(--mov-painel);
 }
 
 /* Sem transição de visibility ao abrir: o painel precisa aceitar foco na hora. */
-.aberta {
+.aberto {
     box-shadow: var(--sombra-g);
     visibility: visible;
     transform: none;
     transition: transform var(--mov-painel) var(--curva);
 }
 
-.marca {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--e-2);
-    min-height: var(--controle);
-    padding: var(--e-1);
-    margin-bottom: var(--e-5);
+.menu .abrir {
+    align-self: flex-end;
 }
 
-.marca .logo img {
-    width: 10rem;
-}
-
-.navegacao {
+.menu nav {
     flex: 1;
 }
 
-.navegacao ul {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
 .item {
+    position: relative;
     display: flex;
     align-items: center;
     gap: var(--e-3);
     width: 100%;
     min-height: var(--controle);
-    padding: 0 var(--e-3);
+    padding: 0;
     border: 0;
-    border-radius: var(--raio-p);
     background: transparent;
     color: var(--texto-suave);
     font-size: var(--fs-p);
     font-weight: var(--peso-medio);
     text-decoration: none;
     cursor: pointer;
-    transition:
-        background-color var(--mov-hover) var(--curva),
-        color var(--mov-hover) var(--curva);
+    transition: color var(--mov-hover) var(--curva);
 }
 
 .item:hover {
-    background: var(--superficie-sutil);
     color: var(--texto-titulo);
 }
 
-.ativo,
-.ativo:hover {
-    background: var(--superficie-selecao);
+.ativo {
     color: var(--texto-titulo);
     font-weight: var(--peso-forte);
 }
 
 .sair {
-    position: relative;
-    margin-top: var(--e-5);
-}
-
-.sair::before {
-    content: "";
-    position: absolute;
-    top: calc(var(--e-3) * -1);
-    right: 0;
-    left: 0;
-    border-top: 1px solid var(--borda);
+    border-top: 1px solid var(--filete);
 }
 
 .coluna {
     display: flex;
+    flex: 1;
     flex-direction: column;
     min-width: 0;
-    min-height: calc(100dvh - var(--topo));
 }
 
 .conteudo {
@@ -174,37 +156,78 @@
     width: 100%;
     max-width: var(--conteudo-max);
     margin: 0 auto;
-    padding: var(--e-4);
+    padding: var(--e-5) var(--e-4) var(--e-7);
 }
 
 @media (min-width: 48rem) {
+    .faixa,
     .conteudo {
-        padding: var(--e-5);
-    }
-}
-
-@media (min-width: 64rem) {
-    .layout {
-        display: grid;
-        grid-template-columns: var(--lateral) minmax(0, 1fr);
+        padding-right: var(--e-6);
+        padding-left: var(--e-6);
     }
 
-    .topo,
+    .conteudo {
+        padding-top: var(--e-7);
+    }
+
+    .faixa > .abrir,
     .fundo {
         display: none;
     }
 
-    .lateral {
-        position: sticky;
+    .menu {
+        position: static;
+        flex: 1;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: var(--e-5);
         width: auto;
-        height: 100dvh;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        overflow: visible;
         visibility: visible;
         transform: none;
         transition: none;
     }
 
-    .coluna {
-        min-height: 100dvh;
+    .menu nav {
+        display: flex;
+    }
+
+    .lista {
+        display: flex;
+        gap: var(--e-5);
+    }
+
+    .lista li {
+        display: flex;
+    }
+
+    .item {
+        width: auto;
+        height: 100%;
+    }
+
+    .item svg {
+        display: none;
+    }
+
+    /* Filete da seção atual, sobre a linha do cabeçalho */
+    .ativo::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: -1px;
+        left: 0;
+        height: 3px;
+        background: var(--marca-ativa);
+    }
+
+    .sair {
+        border-top: 0;
     }
 }
 

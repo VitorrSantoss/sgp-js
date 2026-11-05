@@ -23,14 +23,15 @@
     display: none;
 }
 
+/* Superfície escura: único lugar onde âmbar pode aparecer como ícone. */
 .aviso {
     display: flex;
     align-items: flex-start;
     gap: var(--e-2);
-    padding: 0 0 0 var(--e-3);
-    border: 1px solid var(--borda);
+    padding-left: var(--e-3);
     border-radius: var(--raio-m);
-    background: var(--superficie);
+    background: var(--superficie-marca);
+    color: var(--texto-invertido);
     box-shadow: var(--sombra-m);
     pointer-events: auto;
     animation: entrar var(--mov-painel) var(--curva);
@@ -42,11 +43,11 @@
 }
 
 .sucesso .icone {
-    color: var(--tom-sucesso);
+    color: var(--texto-invertido);
 }
 
 .erro .icone {
-    color: var(--perigo);
+    color: var(--destaque-invertido);
 }
 
 .mensagem {
@@ -67,12 +68,17 @@
     border: 0;
     border-radius: var(--raio-p);
     background: transparent;
-    color: var(--texto-suave);
+    color: var(--texto-invertido);
     cursor: pointer;
 }
 
 .fechar:hover {
-    background: var(--superficie-sutil);
+    background: var(--acao-hover);
+}
+
+.fechar:focus-visible {
+    outline-color: var(--texto-invertido);
+    outline-offset: -3px;
 }
 
 @keyframes entrar {

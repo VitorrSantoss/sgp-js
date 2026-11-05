@@ -10,8 +10,8 @@
 }
 
 .rotulo {
-    color: var(--texto-titulo);
-    font-size: var(--fs-p);
+    color: var(--texto-suave);
+    font-size: var(--fs-xs);
     font-weight: var(--peso-medio);
 }
 
@@ -23,21 +23,23 @@
     position: relative;
 }
 
+/* Campo de linha, como um formulário impresso */
 .controle {
     display: block;
     width: 100%;
     min-height: var(--controle);
-    padding: var(--e-2) var(--e-3);
-    border: 1px solid var(--borda-controle);
-    border-radius: var(--raio-p);
-    background: var(--superficie);
+    padding: var(--e-2) 0;
+    border: 0;
+    border-bottom: 1px solid var(--borda-controle);
+    border-radius: 0;
+    background: transparent;
     color: var(--texto);
     font-size: var(--fs-m);
-    transition: border-color var(--mov-hover) var(--curva);
+    transition: box-shadow var(--mov-hover) var(--curva);
 }
 
 .controle:hover:not(:disabled) {
-    border-color: var(--texto-titulo);
+    box-shadow: inset 0 -1px 0 var(--filete-forte);
 }
 
 .controle::placeholder {
@@ -46,11 +48,12 @@
 
 textarea.controle {
     min-height: 7.5rem;
+    line-height: var(--linha);
     resize: vertical;
 }
 
 select.controle {
-    padding-right: var(--e-6);
+    padding-right: var(--e-5);
     appearance: none;
     cursor: pointer;
 }
@@ -58,16 +61,16 @@ select.controle {
 .seta {
     position: absolute;
     top: 50%;
-    right: var(--e-3);
-    color: var(--texto-suave);
+    right: 0;
+    color: var(--texto-titulo);
     transform: translateY(-50%);
     pointer-events: none;
 }
 
 .invalido,
 .invalido:hover:not(:disabled) {
-    border-color: var(--perigo);
-    box-shadow: inset 0 0 0 1px var(--perigo);
+    border-bottom-color: var(--perigo);
+    box-shadow: inset 0 -1px 0 var(--perigo);
 }
 
 .erro {
